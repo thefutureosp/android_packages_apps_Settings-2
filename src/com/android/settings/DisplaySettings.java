@@ -39,6 +39,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceGroup;   
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.text.Spannable;  
@@ -67,7 +68,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_SCREEN_SAVER = "screensaver";
     private static final String KEY_WIFI_DISPLAY = "wifi_display";
     private static final String KEY_BATTERY_LIGHT = "battery_light";
-    private static final String PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";  
+    private static final String PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+    private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";      
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -86,6 +88,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private WifiDisplayStatus mWifiDisplayStatus;
     private Preference mWifiDisplayPreference;
     private Preference mCustomLabel;
+    private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged; 
 
     private String mCustomLabelText = null;  
 
@@ -153,7 +156,11 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
 
 	mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
-        updateCustomLabelTextSummary(); 
+        updateCustomLabelTextSummary();
+
+	mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
+        mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                        Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, 1) == 1);   
     }
 
     private void updateTimeoutPreferenceDescription(long currentTimeout) {
@@ -401,7 +408,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 }
             });
 
-            alert.show();  
+            alert.show();
+	} else if (preference == mWakeUpWhenPluggedOrUnplugged) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
+                    mWakeUpWhenPluggedOrUnplugged.isChecked() ? 1 : 0);
+            return true;    
         }
 	
         return super.onPreferenceTreeClick(preferenceScreen, preference);
