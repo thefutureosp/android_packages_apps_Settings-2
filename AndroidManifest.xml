@@ -1573,10 +1573,13 @@
         />
 
         <!-- ParanoidAndroid customization -->
-       <activity android:name=".paranoid.Lockscreen" />
-       <activity android:name=".paranoid.Toolbar" />
-       <activity android:name=".paranoid.Halo" />
-       <activity android:name=".paranoid.PieControls" />
+        <activity android:name=".paranoid.Lockscreen" />
+        <activity android:name=".paranoid.Toolbar" />
+        <activity android:name=".paranoid.Halo" />
+        <activity android:name=".paranoid.PieControls" />
+
+	<!-- crDroid customization -->
+	<activity android:name=".cyanogenmod.NotificationDrawerStyle" />
 
         <!-- Pseudo-activity used to provide an intent-filter entry point to encryption settings -->
         <activity android:name="Settings$CryptKeeperSettingsActivity"
