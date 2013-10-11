@@ -18,14 +18,12 @@ package com.android.settings;
 
 import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
 
-import android.app.AlertDialog;
 import android.app.ActivityManagerNative;
 import android.app.Dialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;  
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -42,11 +40,9 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceGroup;   
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
-import android.text.Spannable;  
 import android.provider.Settings.SettingNotFoundException;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.EditText;  
 
 import com.android.internal.view.RotationPolicy;
 import com.android.settings.DreamSettings;
@@ -68,9 +64,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_SCREEN_SAVER = "screensaver";
     private static final String KEY_WIFI_DISPLAY = "wifi_display";
     private static final String KEY_BATTERY_LIGHT = "battery_light";
-    private static final String PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
-    private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";      
-
+    
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
     private DisplayManager mDisplayManager;
@@ -87,11 +81,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     private WifiDisplayStatus mWifiDisplayStatus;
     private Preference mWifiDisplayPreference;
-    private Preference mCustomLabel;
-    private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged; 
-
-    private String mCustomLabelText = null;  
-
+    
     private final RotationPolicy.RotationPolicyListener mRotationPolicyListener =
             new RotationPolicy.RotationPolicyListener() {
         @Override
@@ -153,14 +143,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 == WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE) {
             getPreferenceScreen().removePreference(mWifiDisplayPreference);
             mWifiDisplayPreference = null;
-        }
-
-	mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
-        updateCustomLabelTextSummary();
-
-	mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
-        mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
-                        Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, 1) == 1);   
+        }   
     }
 
     private void updateTimeoutPreferenceDescription(long currentTimeout) {
@@ -274,16 +257,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 fontSizeNames[index]));
     }
 
-    private void updateCustomLabelTextSummary() {
-        mCustomLabelText = Settings.System.getString(getActivity().getContentResolver(),
-                Settings.System.CUSTOM_CARRIER_LABEL);
-        if (mCustomLabelText == null || mCustomLabelText.length() == 0) {
-            mCustomLabel.setSummary(R.string.custom_carrier_label_notset);
-        } else {
-            mCustomLabel.setSummary(mCustomLabelText);
-        }
-    }  
-    
     @Override
     public void onResume() {
         super.onResume();
@@ -379,43 +352,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         if (preference == mAccelerometer) {
             RotationPolicy.setRotationLockForAccessibility(
                     getActivity(), !mAccelerometer.isChecked());
-	} else if (preference == mCustomLabel) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle(R.string.custom_carrier_label_title);
-            alert.setMessage(R.string.custom_carrier_label_explain);
+	}
 
-            // Set an EditText view to get user input
-            final EditText input = new EditText(getActivity());
-            input.setText(mCustomLabelText != null ? mCustomLabelText : "");
-            alert.setView(input);
-            alert.setPositiveButton(getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String value = ((Spannable) input.getText()).toString();
-                    Settings.System.putString(getActivity().getContentResolver(),
-                            Settings.System.CUSTOM_CARRIER_LABEL, value);
-                    updateCustomLabelTextSummary();
-
-              Intent i = new Intent();
-                    i.setAction("com.android.settings.LABEL_CHANGED");
-                    getActivity().sendBroadcast(i); 
-                }
-            });
-            alert.setNegativeButton(getResources().getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Canceled.
-                }
-            });
-
-            alert.show();
-	} else if (preference == mWakeUpWhenPluggedOrUnplugged) {
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
-                    mWakeUpWhenPluggedOrUnplugged.isChecked() ? 1 : 0);
-            return true;    
-        }
-	
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 

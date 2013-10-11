@@ -18,11 +18,19 @@ public class crdroidSettings extends SettingsPreferenceFragment
         implements Preference.OnPreferenceChangeListener {
 
     private static final String UI_NOTIFICATION_BEHAVIOUR = "notifications_behaviour";
+    private static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
+    private static final String PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+    private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";       
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
-    private ListPreference mNotificationsBehavior;
     private PreferenceCategory mCrdroidCategory; 
+    private ListPreference mNotificationsBehavior;
+    private CheckBoxPreference mKillAppLongpressBack;
+    private Preference mCustomLabel;
+    private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged; 
 
+    private String mCustomLabelText = null;  
+ 
     private Context mContext;
 
     @Override
@@ -40,11 +48,87 @@ public class crdroidSettings extends SettingsPreferenceFragment
             mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntry());
             mNotificationsBehavior.setOnPreferenceChangeListener(this);
 
+	mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
+        mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                        Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, 1) == 1);
+
+	mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
+        updateCustomLabelTextSummary();
+
+	mKillAppLongpressBack = findAndInitCheckboxPref(KILL_APP_LONGPRESS_BACK);
+
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);  
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+ 
+        updateKillAppLongpressBackOptions();
+    }
+
+    private void writeKillAppLongpressBackOptions() {
+        Settings.Secure.putInt(getActivity().getContentResolver(),
+                Settings.Secure.KILL_APP_LONGPRESS_BACK,
+                mKillAppLongpressBack.isChecked() ? 1 : 0);
+    }
+
+    private void updateKillAppLongpressBackOptions() {
+        mKillAppLongpressBack.setChecked(Settings.Secure.getInt(
+            getActivity().getContentResolver(), Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) != 0);
+    }
+
+    private void updateCustomLabelTextSummary() {
+        mCustomLabelText = Settings.System.getString(getActivity().getContentResolver(),
+                Settings.System.CUSTOM_CARRIER_LABEL);
+        if (mCustomLabelText == null || mCustomLabelText.length() == 0) {
+            mCustomLabel.setSummary(R.string.custom_carrier_label_notset);
+        } else {
+            mCustomLabel.setSummary(mCustomLabelText);
+        }
+    }   
+
+    @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+	if (preference == mKillAppLongpressBack) {
+            writeKillAppLongpressBackOptions();
+	} else if (preference == mCustomLabel) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle(R.string.custom_carrier_label_title);
+            alert.setMessage(R.string.custom_carrier_label_explain);
+
+            // Set an EditText view to get user input
+            final EditText input = new EditText(getActivity());
+            input.setText(mCustomLabelText != null ? mCustomLabelText : "");
+            alert.setView(input);
+            alert.setPositiveButton(getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String value = ((Spannable) input.getText()).toString();
+                    Settings.System.putString(getActivity().getContentResolver(),
+                            Settings.System.CUSTOM_CARRIER_LABEL, value);
+                    updateCustomLabelTextSummary();
+
+              Intent i = new Intent();
+                    i.setAction("com.android.settings.LABEL_CHANGED");
+                    getActivity().sendBroadcast(i); 
+                }
+            });
+            alert.setNegativeButton(getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+            alert.show();
+	} else if (preference == mWakeUpWhenPluggedOrUnplugged) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
+                    mWakeUpWhenPluggedOrUnplugged.isChecked() ? 1 : 0);
+            return true;    
+        }
+
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
