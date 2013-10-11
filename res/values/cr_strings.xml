@@ -1,5 +1,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+    <!-- crDroid Settings -->
+    <string name="crdroid_settings">crDroid</string>
+    <string name="crdroid_custom_settings_header">Custom settings</string>
+
     <!-- Custom Carrier Text -->
     <string name="custom_carrier_label_title">Custom carrier label</string>
     <string name="custom_carrier_label_explain">Please enter a new label. Leave blank to revert to stock label.</string>
@@ -37,6 +41,9 @@
 
     <!-- Kill app long-press back -->
     <string name="kill_app_longpress_back">Kill app back button</string>
-    <string name="kill_app_longpress_back_summary">Kill the foreground app by long-pressing the back key</string>    
+    <string name="kill_app_longpress_back_summary">Kill the foreground app by long-pressing the back key</string>
 
+    <!-- Notification Behavior -->
+    <string name="notification_behaviour_title">Notification behavior</string>
+    
 </resources>

@@ -100,6 +100,13 @@
         android:icon="@drawable/ic_settings_status_bar" 
         android:title="@string/tool_bar_settings" />
 
+    <!-- crDroid Settings -->
+    <header
+        android:id="@+id/crdroid_settings"
+        android:fragment="com.android.settings.crdroid.crdroidSettings"
+        android:icon="@drawable/ic_crdroid_settings" 
+        android:title="@string/crdroid_settings" />
+
     <!-- Themes -->
     <header
         android:id="@+id/themes_settings"
