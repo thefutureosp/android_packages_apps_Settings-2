@@ -22,6 +22,15 @@
             android:entries="@array/notifs_beh_entries"
             android:entryValues="@array/notifs_beh_values" />
 
+	<!-- Low battery pop-up warning -->
+	<ListPreference
+           android:key="pref_low_battery_warning_policy"
+           android:title="@string/pref_low_battery_warning_policy_title"
+           android:dialogTitle="@string/pref_low_battery_warning_policy_dialog_title"
+           android:entries="@array/pref_low_battery_warning_policy_entries"
+           android:entryValues="@array/pref_low_battery_warning_policy_values"
+           android:defaultValue="0" />  
+
 	<!-- Custom carrier label -->
 	<PreferenceScreen
             android:key="custom_carrier_label"

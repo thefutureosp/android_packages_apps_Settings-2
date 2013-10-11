@@ -1,6 +1,9 @@
 package com.android.settings.crdroid;
 
+import android.app.AlertDialog; 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;   
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -9,10 +12,14 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.text.Spannable; 
+import android.widget.EditText;    
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
+
+import java.util.ArrayList;
 
 public class crdroidSettings extends SettingsPreferenceFragment
         implements Preference.OnPreferenceChangeListener {
@@ -20,18 +27,24 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String UI_NOTIFICATION_BEHAVIOUR = "notifications_behaviour";
     private static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
     private static final String PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
-    private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";       
+    private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";
+    private static final String KEY_LOW_BATTERY_WARNING_POLICY = "pref_low_battery_warning_policy";       
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
     private ListPreference mNotificationsBehavior;
     private CheckBoxPreference mKillAppLongpressBack;
     private Preference mCustomLabel;
-    private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged; 
+    private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged;
+    private ListPreference mLowBatteryWarning;   
 
     private String mCustomLabelText = null;  
  
     private Context mContext;
+
+    private final ArrayList<Preference> mAllPrefs = new ArrayList<Preference>();
+    private final ArrayList<CheckBoxPreference> mResetCbPrefs
+            = new ArrayList<CheckBoxPreference>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,14 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
         mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
                         Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, 1) == 1);
+
+	// Low battery warning
+        mLowBatteryWarning = (ListPreference) findPreference(KEY_LOW_BATTERY_WARNING_POLICY);
+        int lowBatteryWarning = Settings.System.getInt(getActivity().getContentResolver(),
+                                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 0);
+        mLowBatteryWarning.setValue(String.valueOf(lowBatteryWarning));
+        mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntry());
+        mLowBatteryWarning.setOnPreferenceChangeListener(this);   
 
 	mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
         updateCustomLabelTextSummary();
@@ -86,6 +107,16 @@ public class crdroidSettings extends SettingsPreferenceFragment
         } else {
             mCustomLabel.setSummary(mCustomLabelText);
         }
+    }
+
+    private CheckBoxPreference findAndInitCheckboxPref(String key) {
+        CheckBoxPreference pref = (CheckBoxPreference) findPreference(key);
+        if (pref == null) {
+            throw new IllegalArgumentException("Cannot find preference with key = " + key);
+        }
+        mAllPrefs.add(pref);
+        mResetCbPrefs.add(pref);
+        return pref;
     }   
 
     @Override
@@ -140,6 +171,14 @@ public class crdroidSettings extends SettingsPreferenceFragment
             int index = mNotificationsBehavior.findIndexOfValue(val);
             mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntries()[index]);
             return true;
+	} else if (preference == mLowBatteryWarning) {
+            int lowBatteryWarning = Integer.valueOf((String) newValue);
+            int index = mLowBatteryWarning.findIndexOfValue((String) newValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY,
+                    lowBatteryWarning);
+            mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntries()[index]);
+            return true;  
 	}  
         return false;
     }
