@@ -30,7 +30,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";
     private static final String KEY_LOW_BATTERY_WARNING_POLICY = "pref_low_battery_warning_policy";
     private static final String KEY_NAVIGATION_RING = "navigation_ring";
-    private static final String KEY_RECENTS_RAM_BAR = "recents_ram_bar";       
+    private static final String KEY_RECENTS_RAM_BAR = "recents_ram_bar";   
+    private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";     
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -40,6 +41,7 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged;
     private ListPreference mLowBatteryWarning;
     private Preference mRamBar;    
+    private CheckBoxPreference mUseAltResolver;
 
     private String mCustomLabelText = null;  
  
@@ -83,6 +85,11 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
 	mRamBar = findPreference(KEY_RECENTS_RAM_BAR);
         updateRamBar();
+
+	mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
+        mUseAltResolver.setChecked(Settings.System.getInt(
+                getActivity().getContentResolver(),
+                Settings.System.ACTIVITY_RESOLVER_USE_ALT, 0) == 1); 
 
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);  
     }
@@ -179,7 +186,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
                     mWakeUpWhenPluggedOrUnplugged.isChecked() ? 1 : 0);
-            return true;    
+            return true;
+	} else if (preference == mUseAltResolver) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.ACTIVITY_RESOLVER_USE_ALT,
+                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;     
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
