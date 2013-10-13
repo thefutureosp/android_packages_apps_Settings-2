@@ -29,7 +29,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
     private static final String KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";
     private static final String KEY_LOW_BATTERY_WARNING_POLICY = "pref_low_battery_warning_policy";
-    private static final String KEY_NAVIGATION_RING = "navigation_ring";       
+    private static final String KEY_NAVIGATION_RING = "navigation_ring";
+    private static final String KEY_RECENTS_RAM_BAR = "recents_ram_bar";       
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -37,7 +38,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private CheckBoxPreference mKillAppLongpressBack;
     private Preference mCustomLabel;
     private CheckBoxPreference mWakeUpWhenPluggedOrUnplugged;
-    private ListPreference mLowBatteryWarning;   
+    private ListPreference mLowBatteryWarning;
+    private Preference mRamBar;    
 
     private String mCustomLabelText = null;  
  
@@ -79,6 +81,9 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
 	mKillAppLongpressBack = findAndInitCheckboxPref(KILL_APP_LONGPRESS_BACK);
 
+	mRamBar = findPreference(KEY_RECENTS_RAM_BAR);
+        updateRamBar();
+
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);  
     }
 
@@ -87,6 +92,7 @@ public class crdroidSettings extends SettingsPreferenceFragment
         super.onResume();
  
         updateKillAppLongpressBackOptions();
+	updateRamBar(); 
     }
 
     private void writeKillAppLongpressBackOptions() {
@@ -119,6 +125,21 @@ public class crdroidSettings extends SettingsPreferenceFragment
         mResetCbPrefs.add(pref);
         return pref;
     }   
+
+    @Override
+    public void onPause() {
+        super.onPause();
+	updateRamBar();
+    }
+
+    private void updateRamBar() {
+        int ramBarMode = Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.System.RECENTS_RAM_BAR_MODE, 0);
+        if (ramBarMode != 0)
+            mRamBar.setSummary(getResources().getString(R.string.ram_bar_color_enabled));
+        else
+            mRamBar.setSummary(getResources().getString(R.string.ram_bar_color_disabled));
+    }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {

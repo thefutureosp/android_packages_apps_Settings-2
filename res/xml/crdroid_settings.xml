@@ -31,6 +31,18 @@
            android:entryValues="@array/pref_low_battery_warning_policy_values"
            android:defaultValue="0" />  
 
+	<!-- Naviagtion ring shortcuts -->
+        <PreferenceScreen
+            android:key="navigation_ring"
+            android:fragment="com.android.settings.crdroid.NavRing"
+            android:title="@string/navigation_ring_title" />
+
+	<!-- Recents RAM bar -->
+	<PreferenceScreen
+           android:key="recents_ram_bar"
+           android:fragment="com.android.settings.crdroid.RamBar"
+           android:title="@string/ram_bar" /> 
+
 	<!-- Custom carrier label -->
 	<PreferenceScreen
             android:key="custom_carrier_label"
@@ -42,12 +54,6 @@
             android:title="@string/wakeup_when_plugged_unplugged_title"
             android:summary="@string/wakeup_when_plugged_unplugged_summary"
             android:defaultValue="true" /> 
-
-	<!-- Naviagtion ring shortcuts -->
-        <PreferenceScreen
-            android:key="navigation_ring"
-            android:fragment="com.android.settings.crdroid.NavRing"
-            android:title="@string/navigation_ring_title" />
 
 	<!-- Navigation bar kill app long press back -->
 	<CheckBoxPreference
