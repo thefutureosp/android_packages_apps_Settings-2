@@ -48,6 +48,13 @@
             android:key="custom_carrier_label"
             android:title="@string/custom_carrier_label_title" />
 
+	<!-- Wifi name on drawer -->
+	<CheckBoxPreference
+            android:key="notification_show_wifi_ssid"
+            android:title="@string/notification_show_wifi_ssid_title"
+            android:summary="@string/notification_show_wifi_ssid_summary"
+            android:defaultValue="false" />
+
 	<!-- Alternate App picker -->
 	<CheckBoxPreference
             android:key="use_alt_resolver"

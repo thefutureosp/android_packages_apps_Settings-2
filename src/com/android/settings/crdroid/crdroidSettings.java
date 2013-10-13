@@ -31,7 +31,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String KEY_LOW_BATTERY_WARNING_POLICY = "pref_low_battery_warning_policy";
     private static final String KEY_NAVIGATION_RING = "navigation_ring";
     private static final String KEY_RECENTS_RAM_BAR = "recents_ram_bar";   
-    private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";     
+    private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
+    private static final String PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";      
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -42,6 +43,7 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private ListPreference mLowBatteryWarning;
     private Preference mRamBar;    
     private CheckBoxPreference mUseAltResolver;
+    private CheckBoxPreference mShowWifiName; 
 
     private String mCustomLabelText = null;  
  
@@ -80,6 +82,10 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
 	mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
         updateCustomLabelTextSummary();
+
+	mShowWifiName = (CheckBoxPreference) findPreference(PREF_NOTIFICATION_SHOW_WIFI_SSID);
+        mShowWifiName.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.NOTIFICATION_SHOW_WIFI_SSID, 0) == 1); 
 
 	mKillAppLongpressBack = findAndInitCheckboxPref(KILL_APP_LONGPRESS_BACK);
 
@@ -191,6 +197,11 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.ACTIVITY_RESOLVER_USE_ALT,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;
+	} else if (preference == mShowWifiName) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.NOTIFICATION_SHOW_WIFI_SSID,
+                    mShowWifiName.isChecked() ? 1 : 0);
             return true;     
         }
 
