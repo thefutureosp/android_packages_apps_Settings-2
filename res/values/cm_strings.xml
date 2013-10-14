@@ -541,7 +541,7 @@
     <string name="swap_volume_buttons_summary">Swap volume buttons when the screen is rotated</string>
 
     <!-- Navigation Bar -->
-    <string name="navigation_bar_category">Navigation bar</string>
+    <string name="navigation_bar_category">Navigation bar and floating controls</string>
     <string name="navigation_bar_title">Buttons and layout</string>
     <string name="navigation_bar_help_text">1 - To begin editing, tap the lock icon\n\n2 - Tap any button to assign or change functionality\n\n3 - Long press any button to rearrange the order\n\n4 - To save, tap the lock icon again\n\n5 - To restore system default, tap the reset button\n\n</string>
     <string name="navigation_bar_tips">\u2022 Actions can only be assigned to one button at a time\n\n\u2022 The home button cannot be re-assigned\n\n\u2022 Side buttons cannot be rearranged</string>
@@ -1706,9 +1706,9 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="trigger_bottom_summary">Adjust the height of the trigger area</string> 
 
     <!-- System UI xml headers -->
-    <string name="status_bar_category_header">Status bar</string>
+    <string name="status_bar_category_header">Status bar and notification drawer</string>
     <string name="visor_and_animation_category_header">Visor and Animation</string>
-    <string name="util_category_header">Util</string>
+    <string name="util_category_header">Misc and util</string>
     <string name="lights_and_warnings_category_header">Lights and Warnings</string>
 
     <!-- QuickSettings style options -->
@@ -1745,7 +1745,7 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="ad_sunlight_mode_summary">Invert the colors when in areas with bright light such as direct sunlight.</string>
     <string name="ad_customizations_title">Customizations</string> 
     <string name="ad_brightness_title">Notification brightness</string>
-    <string name="ad_brightness_summary">Brightness level for displaying notifications when automatic brightness is not enabled.</string>
+    <string name="ad_brightness_summary">Adjust level for notifications when auto brightness is disabled</string>
     <string name="ad_show_date_title">Show date</string>
     <string name="ad_show_date_summary">Show the date above the clock</string>
     <string name="ad_show_ampm_title">Show AM/PM</string>
