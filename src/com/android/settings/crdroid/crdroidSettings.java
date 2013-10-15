@@ -32,7 +32,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String KEY_NAVIGATION_RING = "navigation_ring";
     private static final String KEY_RECENTS_RAM_BAR = "recents_ram_bar";   
     private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
-    private static final String PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";      
+    private static final String PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
+    private static final String PREF_FLIP_QS_TILES = "flip_qs_tiles";       
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -43,7 +44,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private ListPreference mLowBatteryWarning;
     private Preference mRamBar;    
     private CheckBoxPreference mUseAltResolver;
-    private CheckBoxPreference mShowWifiName; 
+    private CheckBoxPreference mShowWifiName;
+    CheckBoxPreference mFlipQsTiles;  
 
     private String mCustomLabelText = null;  
  
@@ -85,7 +87,11 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
 	mShowWifiName = (CheckBoxPreference) findPreference(PREF_NOTIFICATION_SHOW_WIFI_SSID);
         mShowWifiName.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
-                Settings.System.NOTIFICATION_SHOW_WIFI_SSID, 0) == 1); 
+                Settings.System.NOTIFICATION_SHOW_WIFI_SSID, 0) == 1);
+
+	mFlipQsTiles = (CheckBoxPreference) findPreference(PREF_FLIP_QS_TILES);
+        mFlipQsTiles.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.QUICK_SETTINGS_TILES_FLIP, 1) == 1);  
 
 	mKillAppLongpressBack = findAndInitCheckboxPref(KILL_APP_LONGPRESS_BACK);
 
@@ -202,7 +208,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.NOTIFICATION_SHOW_WIFI_SSID,
                     mShowWifiName.isChecked() ? 1 : 0);
-            return true;     
+            return true;
+	} else if (preference == mFlipQsTiles) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.QUICK_SETTINGS_TILES_FLIP,
+                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;      
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);

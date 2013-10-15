@@ -22,6 +22,12 @@
             android:entries="@array/notifs_beh_entries"
             android:entryValues="@array/notifs_beh_values" />
 
+	<!-- One click flip tile -->
+	<CheckBoxPreference
+            android:key="flip_qs_tiles"
+            android:title="@string/flip_qs_tiles_title"
+            android:summary="@string/flip_qs_tiles_summary" /> 
+
 	<!-- Low battery pop-up warning -->
 	<ListPreference
            android:key="pref_low_battery_warning_policy"
