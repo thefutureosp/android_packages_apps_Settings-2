@@ -36,7 +36,7 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String PREF_FLIP_QS_TILES = "flip_qs_tiles";
     private static final String NO_NOTIFICATIONS_PULLDOWN = "no_notifications_pulldown";
     private static final String KEY_SCREEN_ON_NOTIFICATION_LED = "screen_on_notification_led";           
-    rivate static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
+    private static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -86,6 +86,10 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
         mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
                         Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, 1) == 1);
+
+	mStatusBarQuickPeek = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_QUICK_PEEK);
+        mStatusBarQuickPeek.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.System.STATUSBAR_PEEK, 0) == 1)); 
 
 	// Low battery warning
         mLowBatteryWarning = (ListPreference) findPreference(KEY_LOW_BATTERY_WARNING_POLICY);
@@ -194,7 +198,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-	if (preference == mKillAppLongpressBack) {
+	if (preference == mStatusBarQuickPeek) {
+            boolean value = mStatusBarQuickPeek.isChecked();
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.STATUSBAR_PEEK, value ? 1 : 0);
+            return true;	
+	} else if (preference == mKillAppLongpressBack) {
             writeKillAppLongpressBackOptions();
 	} else if (preference == mCustomLabel) {
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
