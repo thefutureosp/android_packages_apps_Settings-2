@@ -33,7 +33,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String KEY_RECENTS_RAM_BAR = "recents_ram_bar";   
     private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
     private static final String PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
-    private static final String PREF_FLIP_QS_TILES = "flip_qs_tiles";       
+    private static final String PREF_FLIP_QS_TILES = "flip_qs_tiles";
+    private static final String NO_NOTIFICATIONS_PULLDOWN = "no_notifications_pulldown";        
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -45,7 +46,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private Preference mRamBar;    
     private CheckBoxPreference mUseAltResolver;
     private CheckBoxPreference mShowWifiName;
-    CheckBoxPreference mFlipQsTiles;  
+    private CheckBoxPreference mFlipQsTiles;
+    private ListPreference mNoNotificationsPulldown;   
 
     private String mCustomLabelText = null;  
  
@@ -64,12 +66,19 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
         mContext = getActivity();
 
-        int CurrentBehavior = Settings.System.getInt(getContentResolver(), Settings.System.NOTIFICATIONS_BEHAVIOUR, 0);
-            mNotificationsBehavior = (ListPreference) findPreference(UI_NOTIFICATION_BEHAVIOUR);
-            mNotificationsBehavior.setValue(String.valueOf(CurrentBehavior));
-            mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntry());
-            mNotificationsBehavior.setOnPreferenceChangeListener(this);
+	mNoNotificationsPulldown = (ListPreference) prefSet.findPreference(NO_NOTIFICATIONS_PULLDOWN);
 
+        int CurrentBehavior = Settings.System.getInt(getContentResolver(), Settings.System.NOTIFICATIONS_BEHAVIOUR, 0);
+        mNotificationsBehavior = (ListPreference) findPreference(UI_NOTIFICATION_BEHAVIOUR);
+        mNotificationsBehavior.setValue(String.valueOf(CurrentBehavior));
+        mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntry());
+        mNotificationsBehavior.setOnPreferenceChangeListener(this);
+
+        int noNotificationsPulldownValue = Settings.System.getInt(getContentResolver(), Settings.System.QS_NO_NOTIFICATION_PULLDOWN, 0);
+        mNoNotificationsPulldown.setValue(String.valueOf(noNotificationsPulldownValue));
+        updateNoNotificationsPulldownSummary(noNotificationsPulldownValue);
+	mNoNotificationsPulldown.setOnPreferenceChangeListener(this);
+        
 	mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(KEY_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
         mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
                         Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, 1) == 1);
@@ -103,7 +112,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
                 getActivity().getContentResolver(),
                 Settings.System.ACTIVITY_RESOLVER_USE_ALT, 0) == 1); 
 
-	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);  
+	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);
+
     }
 
     @Override
@@ -158,6 +168,18 @@ public class crdroidSettings extends SettingsPreferenceFragment
             mRamBar.setSummary(getResources().getString(R.string.ram_bar_color_enabled));
         else
             mRamBar.setSummary(getResources().getString(R.string.ram_bar_color_disabled));
+    }
+
+    private void updateNoNotificationsPulldownSummary(int value) {
+
+        if (value == 0) {
+            /* No Notifications Pulldown deactivated */
+            mNoNotificationsPulldown.setSummary(getResources().getString(R.string.no_notifications_pulldown_off));
+        } else {
+            mNoNotificationsPulldown.setSummary(getResources().getString(value == 1
+                    ? R.string.no_notifications_pulldown_summary_nonperm
+                    : R.string.no_notifications_pulldown_summary_all));
+        }
     }
 
     @Override
@@ -226,6 +248,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Integer.valueOf(val));
             int index = mNotificationsBehavior.findIndexOfValue(val);
             mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntries()[index]);
+            return true;
+	} else if (preference == mNoNotificationsPulldown) {
+            int noNotificationsPulldownValue = Integer.valueOf((String) newValue);
+            Settings.System.putInt(getContentResolver(), Settings.System.QS_NO_NOTIFICATION_PULLDOWN,
+                    noNotificationsPulldownValue);
+            updateNoNotificationsPulldownSummary(noNotificationsPulldownValue);
             return true;
 	} else if (preference == mLowBatteryWarning) {
             int lowBatteryWarning = Integer.valueOf((String) newValue);

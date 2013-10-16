@@ -22,6 +22,14 @@
             android:entries="@array/notifs_beh_entries"
             android:entryValues="@array/notifs_beh_values" />
 
+	<!-- No Notifications pulldown --> 
+	<ListPreference 
+            android:key="no_notifications_pulldown"
+            android:title="@string/title_no_notifications_pulldown"
+            android:entries="@array/no_notifications_pulldown_entries"
+            android:entryValues="@array/no_notifications_pulldown_values"
+            android:persistent="false" /> 
+
 	<!-- One click flip tile -->
 	<CheckBoxPreference
             android:key="flip_qs_tiles"
