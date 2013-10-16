@@ -34,7 +34,9 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
     private static final String PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
     private static final String PREF_FLIP_QS_TILES = "flip_qs_tiles";
-    private static final String NO_NOTIFICATIONS_PULLDOWN = "no_notifications_pulldown";        
+    private static final String NO_NOTIFICATIONS_PULLDOWN = "no_notifications_pulldown";
+    private static final String KEY_SCREEN_ON_NOTIFICATION_LED = "screen_on_notification_led";           
+    rivate static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -47,7 +49,9 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private CheckBoxPreference mUseAltResolver;
     private CheckBoxPreference mShowWifiName;
     private CheckBoxPreference mFlipQsTiles;
-    private ListPreference mNoNotificationsPulldown;   
+    private ListPreference mNoNotificationsPulldown;
+    private CheckBoxPreference mScreenOnNotificationLed;     
+    private CheckBoxPreference mStatusBarQuickPeek; 
 
     private String mCustomLabelText = null;  
  
@@ -89,7 +93,13 @@ public class crdroidSettings extends SettingsPreferenceFragment
                                     Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 0);
         mLowBatteryWarning.setValue(String.valueOf(lowBatteryWarning));
         mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntry());
-        mLowBatteryWarning.setOnPreferenceChangeListener(this);   
+        mLowBatteryWarning.setOnPreferenceChangeListener(this);
+
+	int statusScreenOnNotificationLed = Settings.System.getInt(getContentResolver(),
+                Settings.System.SCREEN_ON_NOTIFICATION_LED, 1);
+        mScreenOnNotificationLed = (CheckBoxPreference) findPreference(KEY_SCREEN_ON_NOTIFICATION_LED);
+        mScreenOnNotificationLed.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.SCREEN_ON_NOTIFICATION_LED, 0) == 1);     
 
 	mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
         updateCustomLabelTextSummary();
@@ -235,7 +245,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.QUICK_SETTINGS_TILES_FLIP,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
-            return true;      
+            return true;
+	} else if (preference == mScreenOnNotificationLed) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SCREEN_ON_NOTIFICATION_LED,
+                    mScreenOnNotificationLed.isChecked() ? 1 : 0);
+	    return true;       
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
