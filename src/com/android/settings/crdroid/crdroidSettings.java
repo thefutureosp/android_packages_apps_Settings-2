@@ -37,6 +37,9 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String NO_NOTIFICATIONS_PULLDOWN = "no_notifications_pulldown";
     private static final String KEY_SCREEN_ON_NOTIFICATION_LED = "screen_on_notification_led";           
     private static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
+    private static final String PREF_STATUS_BAR_TRAFFIC_ENABLE = "status_bar_traffic_enable";
+    private static final String PREF_STATUS_BAR_TRAFFIC_HIDE = "status_bar_traffic_hide";
+    private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";   
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -52,6 +55,9 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private ListPreference mNoNotificationsPulldown;
     private CheckBoxPreference mScreenOnNotificationLed;     
     private CheckBoxPreference mStatusBarQuickPeek; 
+    private CheckBoxPreference mStatusBarTrafficEnable;
+    private CheckBoxPreference mStatusBarTrafficHide;
+    private ListPreference mStatusBarTrafficSummary; 
 
     private String mCustomLabelText = null;  
  
@@ -70,14 +76,13 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
         mContext = getActivity();
 
-	mNoNotificationsPulldown = (ListPreference) prefSet.findPreference(NO_NOTIFICATIONS_PULLDOWN);
-
         int CurrentBehavior = Settings.System.getInt(getContentResolver(), Settings.System.NOTIFICATIONS_BEHAVIOUR, 0);
         mNotificationsBehavior = (ListPreference) findPreference(UI_NOTIFICATION_BEHAVIOUR);
         mNotificationsBehavior.setValue(String.valueOf(CurrentBehavior));
         mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntry());
         mNotificationsBehavior.setOnPreferenceChangeListener(this);
-
+	
+	mNoNotificationsPulldown = (ListPreference) prefSet.findPreference(NO_NOTIFICATIONS_PULLDOWN);
         int noNotificationsPulldownValue = Settings.System.getInt(getContentResolver(), Settings.System.QS_NO_NOTIFICATION_PULLDOWN, 0);
         mNoNotificationsPulldown.setValue(String.valueOf(noNotificationsPulldownValue));
         updateNoNotificationsPulldownSummary(noNotificationsPulldownValue);
@@ -90,6 +95,19 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	mStatusBarQuickPeek = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_QUICK_PEEK);
         mStatusBarQuickPeek.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                 Settings.System.STATUSBAR_PEEK, 0) == 1)); 
+	
+	mStatusBarTrafficEnable = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_TRAFFIC_ENABLE);
+        mStatusBarTrafficEnable.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.System.STATUS_BAR_TRAFFIC_ENABLE, 0) == 1));
+
+        mStatusBarTrafficHide = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_TRAFFIC_HIDE);
+        mStatusBarTrafficHide.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.System.STATUS_BAR_TRAFFIC_HIDE, 1) == 1));  
+
+	mStatusBarTrafficSummary = (ListPreference) findPreference(STATUS_BAR_TRAFFIC_SUMMARY);
+        mStatusBarTrafficSummary.setOnPreferenceChangeListener(this);
+        mStatusBarTrafficSummary.setValue((Settings.System.getInt(getActivity().getContentResolver(),
+                        Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, 3000)) + "");
 
 	// Low battery warning
         mLowBatteryWarning = (ListPreference) findPreference(KEY_LOW_BATTERY_WARNING_POLICY);
@@ -198,8 +216,10 @@ public class crdroidSettings extends SettingsPreferenceFragment
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+	boolean value;	
+
 	if (preference == mStatusBarQuickPeek) {
-            boolean value = mStatusBarQuickPeek.isChecked();
+            value = mStatusBarQuickPeek.isChecked();
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUSBAR_PEEK, value ? 1 : 0);
             return true;	
@@ -259,7 +279,17 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.SCREEN_ON_NOTIFICATION_LED,
                     mScreenOnNotificationLed.isChecked() ? 1 : 0);
-	    return true;       
+	    return true;
+	} else if (preference == mStatusBarTrafficEnable) {
+            value = mStatusBarTrafficEnable.isChecked();
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.STATUS_BAR_TRAFFIC_ENABLE, value ? 1 : 0);
+            return true;
+        } else if (preference == mStatusBarTrafficHide) {
+            value = mStatusBarTrafficHide.isChecked();
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.STATUS_BAR_TRAFFIC_HIDE, value ? 1 : 0);
+            return true;       
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -286,7 +316,14 @@ public class crdroidSettings extends SettingsPreferenceFragment
                     Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY,
                     lowBatteryWarning);
             mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntries()[index]);
-            return true;  
+            return true;
+	} else if (preference == mStatusBarTrafficSummary) {
+            int val = Integer.valueOf((String) newValue);
+            int index = mStatusBarTrafficSummary.findIndexOfValue((String) newValue);
+            Settings.System.putInt(getActivity().getContentResolver(), 
+		    Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, val);
+            mStatusBarTrafficSummary.setSummary(mStatusBarTrafficSummary.getEntries()[index]);
+            return true;    
 	}  
         return false;
     }

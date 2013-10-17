@@ -132,4 +132,29 @@
     <string name="statusbar_quick_peek_title">Quick Peek full screen apps</string>
     <string name="statusbar_quick_peek_summary">Peek at statusbar of full screen apps by swiping from top edge of screen\nPS: DOES NOT WORK WHEN PIE IS ENABLE</string>      
 
+    <!-- Traffic meter -->
+    <string name="traffic_cat">Traffic meter options</string>
+    <string name="enable_network_speed">Traffic meter indicator</string>
+    <string name="enable_network_speed_summary">Show traffic meter in statusbar</string>
+    <string name="hide_network_speed">Hide when there is no traffic</string>
+    <string name="hide_network_speed_summary">Hide traffic meter indicator when there is no traffic</string>
+    
+    <!-- Traffic meter summary-->
+    <string name="network_speed_summary">Show summary of traffic</string>
+    <string name="traffic_timeout_0s">Don\'t show</string>
+    <string name="traffic_timeout_1s">1 second</string>
+    <string name="traffic_timeout_2s">2 seconds</string>
+    <string name="traffic_timeout_3s">3 seconds</string>
+    <string name="traffic_timeout_5s">5 seconds</string>
+    <string name="traffic_timeout_8s">8 seconds</string>
+    <string name="traffic_timeout_10s">10 seconds</string>
+    <string name="traffic_timeout_15s">15 seconds</string>
+    <string name="traffic_timeout_25s">25 seconds</string>
+
+    <!-- Traffic meter color style -->
+    <string name="network_speed_color_title">Traffic meter color</string>
+    <string name="network_speed_color_style">Color style</string>
+    <string name="network_speed_color_reset">Reset</string>
+    <string name="network_speed_color_summary">Change the color of traffic meter indicator</string>  
+
 </resources>
