@@ -40,7 +40,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String PREF_STATUS_BAR_TRAFFIC_ENABLE = "status_bar_traffic_enable";
     private static final String PREF_STATUS_BAR_TRAFFIC_HIDE = "status_bar_traffic_hide";
     private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";
-    private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";   
+    private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot"; 
+    private static final String UI_COLLAPSE_BEHAVIOUR = "notification_drawer_collapse_on_dismiss";   
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -59,7 +60,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private CheckBoxPreference mStatusBarTrafficEnable;
     private CheckBoxPreference mStatusBarTrafficHide;
     private ListPreference mStatusBarTrafficSummary;
-    private ListPreference mMSOB;   
+    private ListPreference mMSOB; 
+    private ListPreference mCollapseOnDismiss;   
 
     private String mCustomLabelText = null;  
  
@@ -77,6 +79,14 @@ public class crdroidSettings extends SettingsPreferenceFragment
         PreferenceScreen prefSet = getPreferenceScreen();
 
         mContext = getActivity();
+
+	int collapseBehaviour = Settings.System.getInt(getContentResolver(),
+                    Settings.System.STATUS_BAR_COLLAPSE_ON_DISMISS,
+                    Settings.System.STATUS_BAR_COLLAPSE_IF_NO_CLEARABLE);
+        mCollapseOnDismiss = (ListPreference) prefSet.findPreference(UI_COLLAPSE_BEHAVIOUR);
+        mCollapseOnDismiss.setValue(String.valueOf(collapseBehaviour));
+        mCollapseOnDismiss.setOnPreferenceChangeListener(this);
+        updateCollapseBehaviourSummary(collapseBehaviour); 
 
         int CurrentBehavior = Settings.System.getInt(getContentResolver(), Settings.System.NOTIFICATIONS_BEHAVIOUR, 0);
         mNotificationsBehavior = (ListPreference) findPreference(UI_NOTIFICATION_BEHAVIOUR);
@@ -247,6 +257,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
                 Settings.System.MEDIA_SCANNER_ON_BOOT, 0);
         mMSOB.setValue(String.valueOf(value));
         mMSOB.setSummary(mMSOB.getEntry());
+    } 
+
+    private void updateCollapseBehaviourSummary(int setting) {
+        String[] summaries = getResources().getStringArray(
+                R.array.notification_drawer_collapse_on_dismiss_summaries);
+        mCollapseOnDismiss.setSummary(summaries[setting]);
     }  
 
     @Override
@@ -331,9 +347,15 @@ public class crdroidSettings extends SettingsPreferenceFragment
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mNotificationsBehavior) {
+	if (preference == mCollapseOnDismiss) {
+            int value = Integer.valueOf((String) newValue);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.STATUS_BAR_COLLAPSE_ON_DISMISS, value);
+            updateCollapseBehaviourSummary(value);
+            return true;         
+	} else if (preference == mNotificationsBehavior) {
             String val = (String) newValue;
-                     Settings.System.putInt(getContentResolver(), Settings.System.NOTIFICATIONS_BEHAVIOUR,
+                    Settings.System.putInt(getContentResolver(), Settings.System.NOTIFICATIONS_BEHAVIOUR,
             Integer.valueOf(val));
             int index = mNotificationsBehavior.findIndexOfValue(val);
             mNotificationsBehavior.setSummary(mNotificationsBehavior.getEntries()[index]);
