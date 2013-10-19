@@ -156,10 +156,14 @@ public class crdroidSettings extends SettingsPreferenceFragment
                 getActivity().getContentResolver(),
                 Settings.System.ACTIVITY_RESOLVER_USE_ALT, 0) == 1);
 
-        mMSOB = (ListPreference) findPreference(MEDIA_SCANNER_ON_BOOT);
-        mAllPrefs.add(mMSOB);
-        mMSOB.setOnPreferenceChangeListener(this);   
-
+	// Media scan behavior
+	int MSOB = Settings.System.getInt(getActivity().getContentResolver(),
+			Settings.System.MEDIA_SCANNER_ON_BOOT, 0);
+	mMSOB = (ListPreference) findPreference(MEDIA_SCANNER_ON_BOOT);	
+	mMSOB.setValue(String.valueOf(MSOB));
+	mMSOB.setSummary(mMSOB.getEntry());
+	mMSOB.setOnPreferenceChangeListener(this);	
+        
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);
 
     }
@@ -230,40 +234,11 @@ public class crdroidSettings extends SettingsPreferenceFragment
         }
     }
 
-    /*
-    private void updateAllOptions() {
-        updateMSOBOptions();
-    }
-
-    private void resetDangerousOptions() {
-        resetMSOBOptions();
-    }
-    */
-
-    private void resetMSOBOptions() {
-        Settings.System.putInt(getActivity().getContentResolver(),
-                Settings.System.MEDIA_SCANNER_ON_BOOT, 0);
-    }
-
-    private void writeMSOBOptions(Object newValue) {
-        Settings.System.putInt(getActivity().getContentResolver(),
-                Settings.System.MEDIA_SCANNER_ON_BOOT,
-                Integer.valueOf((String) newValue));
-        updateMSOBOptions();
-    }
-
-    private void updateMSOBOptions() {
-        int value = Settings.System.getInt(getActivity().getContentResolver(),
-                Settings.System.MEDIA_SCANNER_ON_BOOT, 0);
-        mMSOB.setValue(String.valueOf(value));
-        mMSOB.setSummary(mMSOB.getEntry());
-    } 
-
     private void updateCollapseBehaviourSummary(int setting) {
         String[] summaries = getResources().getStringArray(
                 R.array.notification_drawer_collapse_on_dismiss_summaries);
         mCollapseOnDismiss.setSummary(summaries[setting]);
-    }  
+    }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -382,8 +357,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
             mStatusBarTrafficSummary.setSummary(mStatusBarTrafficSummary.getEntries()[index]);
             return true;
 	} else if (preference == mMSOB) {
-            writeMSOBOptions(newValue);
-            return true;     
+            int MSOB = Integer.valueOf((String) newValue);
+	    int index = mMSOB.findIndexOfValue((String) newValue);
+	    Settings.System.putInt(getActivity().getContentResolver(),
+		    Settings.System.MEDIA_SCANNER_ON_BOOT, MSOB);
+	    mMSOB.setSummary(mMSOB.getEntries()[index]);	
+	    return true;     
 	}  
         return false;
     }
