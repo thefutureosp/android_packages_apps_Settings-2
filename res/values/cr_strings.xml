@@ -1,5 +1,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+    <!-- crDroid Version -->	
+    <string name="crDroid_version">crDroid AOSPA version</string>
+    <string name="crDroid_version_default">Build 1</string>
+
     <!-- crDroid Settings -->
     <string name="crdroid_settings">crDroid</string>
     <string name="crdroid_custom_settings_header">Custom settings</string>
