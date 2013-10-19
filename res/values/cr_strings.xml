@@ -155,6 +155,12 @@
     <string name="network_speed_color_title">Traffic meter color</string>
     <string name="network_speed_color_style">Color style</string>
     <string name="network_speed_color_reset">Reset</string>
-    <string name="network_speed_color_summary">Change the color of traffic meter indicator</string>  
+    <string name="network_speed_color_summary">Change the color of traffic meter indicator</string>
+
+    <!-- MediaScanner behavior on boot -->
+    <string name="media_scanner_on_boot_title">MediaScanner behavior on boot</string>
+    <string name="media_scanner_on_boot_enabled">Scan media</string>
+    <string name="media_scanner_on_boot_ask">Ask to scan (notification)</string>
+    <string name="media_scanner_on_boot_disabled">Do not scan media</string>    
 
 </resources>

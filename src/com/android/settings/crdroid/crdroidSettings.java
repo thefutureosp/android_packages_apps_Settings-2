@@ -39,7 +39,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
     private static final String PREF_STATUS_BAR_TRAFFIC_ENABLE = "status_bar_traffic_enable";
     private static final String PREF_STATUS_BAR_TRAFFIC_HIDE = "status_bar_traffic_hide";
-    private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";   
+    private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";
+    private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";   
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -57,7 +58,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private CheckBoxPreference mStatusBarQuickPeek; 
     private CheckBoxPreference mStatusBarTrafficEnable;
     private CheckBoxPreference mStatusBarTrafficHide;
-    private ListPreference mStatusBarTrafficSummary; 
+    private ListPreference mStatusBarTrafficSummary;
+    private ListPreference mMSOB;   
 
     private String mCustomLabelText = null;  
  
@@ -142,7 +144,11 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
         mUseAltResolver.setChecked(Settings.System.getInt(
                 getActivity().getContentResolver(),
-                Settings.System.ACTIVITY_RESOLVER_USE_ALT, 0) == 1); 
+                Settings.System.ACTIVITY_RESOLVER_USE_ALT, 0) == 1);
+
+        mMSOB = (ListPreference) findPreference(MEDIA_SCANNER_ON_BOOT);
+        mAllPrefs.add(mMSOB);
+        mMSOB.setOnPreferenceChangeListener(this);   
 
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);
 
@@ -213,6 +219,35 @@ public class crdroidSettings extends SettingsPreferenceFragment
                     : R.string.no_notifications_pulldown_summary_all));
         }
     }
+
+    /*
+    private void updateAllOptions() {
+        updateMSOBOptions();
+    }
+
+    private void resetDangerousOptions() {
+        resetMSOBOptions();
+    }
+    */
+
+    private void resetMSOBOptions() {
+        Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.MEDIA_SCANNER_ON_BOOT, 0);
+    }
+
+    private void writeMSOBOptions(Object newValue) {
+        Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.MEDIA_SCANNER_ON_BOOT,
+                Integer.valueOf((String) newValue));
+        updateMSOBOptions();
+    }
+
+    private void updateMSOBOptions() {
+        int value = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.MEDIA_SCANNER_ON_BOOT, 0);
+        mMSOB.setValue(String.valueOf(value));
+        mMSOB.setSummary(mMSOB.getEntry());
+    }  
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -323,7 +358,10 @@ public class crdroidSettings extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getContentResolver(), 
 		    Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, val);
             mStatusBarTrafficSummary.setSummary(mStatusBarTrafficSummary.getEntries()[index]);
-            return true;    
+            return true;
+	} else if (preference == mMSOB) {
+            writeMSOBOptions(newValue);
+            return true;     
 	}  
         return false;
     }
