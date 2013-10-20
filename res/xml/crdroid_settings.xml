@@ -38,6 +38,13 @@
             android:entryValues="@array/no_notifications_pulldown_values"
             android:persistent="false" /> 
 
+        <!-- Active display -->
+	<PreferenceScreen
+            android:key="active_display"
+            android:fragment="com.android.settings.crdroid.ActiveDisplaySettings"
+            android:title="@string/ad_settings_title"
+            android:summary="@string/ad_settings_summary" /> 
+
 	<!-- One click flip tile -->
 	<CheckBoxPreference
             android:key="flip_qs_tiles"
