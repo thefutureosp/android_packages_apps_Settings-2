@@ -45,7 +45,7 @@
 
     <!-- Kill app long-press back -->
     <string name="kill_app_longpress_back">Kill app back button</string>
-    <string name="kill_app_longpress_back_summary">Kill the foreground app by long-pressing the back key</string>
+    <string name="kill_app_longpress_back_summary">Kill the foreground app by long-pressing the back key in navigation bar or hardware key</string>
 
     <!-- Notification Behavior -->
     <string name="notification_behaviour_title">Notification behavior</string>
@@ -134,7 +134,7 @@
 
     <!-- Statusbar Quick Peek -->
     <string name="statusbar_quick_peek_title">Quick Peek full screen apps</string>
-    <string name="statusbar_quick_peek_summary">Peek at statusbar of full screen apps by swiping from top edge of screen\nPS: DOES NOT WORK WHEN PIE IS ENABLE</string>      
+    <string name="statusbar_quick_peek_summary">Peek at statusbar by swiping from top edge of screen</string>      
 
     <!-- Traffic meter -->
     <string name="traffic_cat">Traffic meter options</string>
