@@ -101,7 +101,15 @@
 	<PreferenceScreen
            android:key="recents_ram_bar"
            android:fragment="com.android.settings.crdroid.RamBar"
-           android:title="@string/ram_bar" /> 
+           android:title="@string/ram_bar" />
+
+	<!-- Less notification sound -->
+	<ListPreference
+            android:key="less_notification_sounds"
+            android:title="@string/less_notification_sounds_title"
+            android:summary="@string/less_notification_sounds_summary"
+            android:entries="@array/less_notification_sounds_entries"
+            android:entryValues="@array/less_notification_sounds_values" />  
 
 	<!-- Custom carrier label -->
 	<PreferenceScreen
@@ -115,7 +123,7 @@
             android:summary="@string/notification_show_wifi_ssid_summary"
             android:defaultValue="false" />
 
-	<!-- Quick peek in fullscreen apps -->
+	<!-- Quick peek -->
 	<CheckBoxPreference
             android:key="status_bar_quick_peek"
             android:title="@string/statusbar_quick_peek_title"

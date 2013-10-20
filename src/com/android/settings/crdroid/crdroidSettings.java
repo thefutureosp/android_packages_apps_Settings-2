@@ -41,7 +41,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String PREF_STATUS_BAR_TRAFFIC_HIDE = "status_bar_traffic_hide";
     private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";
     private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot"; 
-    private static final String UI_COLLAPSE_BEHAVIOUR = "notification_drawer_collapse_on_dismiss";   
+    private static final String UI_COLLAPSE_BEHAVIOUR = "notification_drawer_collapse_on_dismiss";
+    private static final String PREF_LESS_NOTIFICATION_SOUNDS = "less_notification_sounds";     
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -61,7 +62,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private CheckBoxPreference mStatusBarTrafficHide;
     private ListPreference mStatusBarTrafficSummary;
     private ListPreference mMSOB; 
-    private ListPreference mCollapseOnDismiss;   
+    private ListPreference mCollapseOnDismiss;
+    private ListPreference mAnnoyingNotifications;     
 
     private String mCustomLabelText = null;  
  
@@ -162,7 +164,14 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	mMSOB = (ListPreference) findPreference(MEDIA_SCANNER_ON_BOOT);	
 	mMSOB.setValue(String.valueOf(MSOB));
 	mMSOB.setSummary(mMSOB.getEntry());
-	mMSOB.setOnPreferenceChangeListener(this);	
+	mMSOB.setOnPreferenceChangeListener(this);
+
+	// Less notification sound
+	mAnnoyingNotifications = (ListPreference) findPreference(PREF_LESS_NOTIFICATION_SOUNDS);
+        mAnnoyingNotifications.setOnPreferenceChangeListener(this);
+        int notificationThreshold = Settings.System.getInt(getContentResolver(),
+                Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 0);
+        mAnnoyingNotifications.setValue(Integer.toString(notificationThreshold));	
         
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);
 
@@ -362,7 +371,11 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	    Settings.System.putInt(getActivity().getContentResolver(),
 		    Settings.System.MEDIA_SCANNER_ON_BOOT, MSOB);
 	    mMSOB.setSummary(mMSOB.getEntries()[index]);	
-	    return true;     
+	    return true;
+	} else if (preference == mAnnoyingNotifications) {
+            final int val = Integer.valueOf((String) newValue);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, val);      
 	}  
         return false;
     }
