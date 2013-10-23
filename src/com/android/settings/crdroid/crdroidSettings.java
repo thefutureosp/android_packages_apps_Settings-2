@@ -42,7 +42,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";
     private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot"; 
     private static final String UI_COLLAPSE_BEHAVIOUR = "notification_drawer_collapse_on_dismiss";
-    private static final String PREF_LESS_NOTIFICATION_SOUNDS = "less_notification_sounds";     
+    private static final String PREF_LESS_NOTIFICATION_SOUNDS = "less_notification_sounds";
+    private static final String SHOW_CPU_INFO_KEY = "show_cpu_info";      
     private static final String CRDROID_CATEGORY = "crdroid_status"; 
 
     private PreferenceCategory mCrdroidCategory; 
@@ -63,7 +64,8 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private ListPreference mStatusBarTrafficSummary;
     private ListPreference mMSOB; 
     private ListPreference mCollapseOnDismiss;
-    private ListPreference mAnnoyingNotifications;     
+    private ListPreference mAnnoyingNotifications;
+    private CheckBoxPreference mShowCpuInfo;      
 
     private String mCustomLabelText = null;  
  
@@ -172,7 +174,12 @@ public class crdroidSettings extends SettingsPreferenceFragment
         int notificationThreshold = Settings.System.getInt(getContentResolver(),
                 Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 0);
         mAnnoyingNotifications.setValue(Integer.toString(notificationThreshold));	
-        
+
+	// CPU info        
+	mShowCpuInfo = (CheckBoxPreference) prefSet.findPreference(SHOW_CPU_INFO_KEY); 
+	mShowCpuInfo.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.Global.SHOW_CPU, 0) != 0));
+
 	mCrdroidCategory = (PreferenceCategory) prefSet.findPreference(CRDROID_CATEGORY);
 
     }
@@ -222,6 +229,10 @@ public class crdroidSettings extends SettingsPreferenceFragment
 	updateRamBar();
     }
 
+    void updateCheckBox(CheckBoxPreference checkBox, boolean value) {
+        checkBox.setChecked(value);
+    }
+
     private void updateRamBar() {
         int ramBarMode = Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                 Settings.System.RECENTS_RAM_BAR_MODE, 0);
@@ -248,6 +259,19 @@ public class crdroidSettings extends SettingsPreferenceFragment
                 R.array.notification_drawer_collapse_on_dismiss_summaries);
         mCollapseOnDismiss.setSummary(summaries[setting]);
     }
+
+    private void writeCpuInfoOptions() {
+        boolean value = mShowCpuInfo.isChecked();
+        Settings.Global.putInt(getActivity().getContentResolver(),
+                Settings.Global.SHOW_CPU, value ? 1 : 0);
+        Intent service = (new Intent())
+                .setClassName("com.android.systemui", "com.android.systemui.CPUInfoService");
+        if (value) {
+            getActivity().startService(service);
+        } else {
+            getActivity().stopService(service);
+        }
+    } 
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -324,7 +348,9 @@ public class crdroidSettings extends SettingsPreferenceFragment
             value = mStatusBarTrafficHide.isChecked();
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUS_BAR_TRAFFIC_HIDE, value ? 1 : 0);
-            return true;       
+            return true;
+	} else if (preference == mShowCpuInfo) {
+            writeCpuInfoOptions();        
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);

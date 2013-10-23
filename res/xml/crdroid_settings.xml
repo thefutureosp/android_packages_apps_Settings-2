@@ -96,6 +96,12 @@
             android:fragment="com.android.settings.crdroid.NavRing"
             android:title="@string/navigation_ring_title" />
 
+	<!-- CPU info -->
+	<CheckBoxPreference
+           android:key="show_cpu_info"
+           android:title="@string/show_cpu_info"
+           android:summary="@string/show_cpu_info_summary"/> 
+
 	<!-- Media scanner behavior on boot -->
 	<ListPreference
            android:key="media_scanner_on_boot"
