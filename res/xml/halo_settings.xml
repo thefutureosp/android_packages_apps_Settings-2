@@ -84,4 +84,9 @@
             android:summary="@string/halo_unlock_ping_summary"
             android:defaultValue="false" />
 
+	<PreferenceScreen
+            android:key="halo_colors"
+            android:fragment="com.android.settings.crdroid.HaloColors"
+            android:title="@string/halo_colors_settings" /> 
+
 </PreferenceScreen>
