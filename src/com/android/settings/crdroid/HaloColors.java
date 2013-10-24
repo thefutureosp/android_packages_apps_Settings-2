@@ -20,9 +20,11 @@ public class HaloColors extends SettingsPreferenceFragment
 
     private static final String KEY_HALO_COLORS = "halo_colors"; 
     private static final String KEY_HALO_CIRCLE_COLOR = "halo_circle_color";
-    
+    private static final String KEY_HALO_EFFECT_COLOR = "halo_effect_color";     
+
     private CheckBoxPreference mHaloColors; 
     private ColorPickerPreference mHaloCircleColor;
+    private ColorPickerPreference mHaloEffectColor; 
     
     private Context mContext;
 
@@ -44,7 +46,15 @@ public class HaloColors extends SettingsPreferenceFragment
         		Settings.System.HALO_CIRCLE_COLOR, 0xff33b5b3);
         String hex = ColorPickerPreference.convertToARGB(color);
     	mHaloCircleColor.setSummary(hex);
-    	mHaloCircleColor.setEnabled(isChecked());
+    	mHaloCircleColor.setEnabled(mHaloColors.isChecked());
+
+	mHaloEffectColor = (ColorPickerPreference) prefSet.findPreference(KEY_HALO_EFFECT_COLOR);
+        mHaloEffectColor.setOnPreferenceChangeListener(this);
+        color = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.HALO_EFFECT_COLOR, 0xff33b5b3);
+        hex = ColorPickerPreference.convertToARGB(color);
+        mHaloEffectColor.setSummary(hex);
+        mHaloEffectColor.setEnabled(mHaloColors.isChecked());
     	
     }
 
@@ -52,18 +62,26 @@ public class HaloColors extends SettingsPreferenceFragment
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 	if (preference == mHaloColors) {
                 Settings.System.putInt(mContext.getContentResolver(),
-                                Settings.System.HALO_COLOR, mHaloColors.isChecked() ? 1 : 0);
+                         Settings.System.HALO_COLOR, mHaloColors.isChecked() ? 1 : 0);
+		mHaloCircleColor.setEnabled(mHaloColors.isChecked());
+                mHaloEffectColor.setEnabled(mHaloColors.isChecked()); 
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mHaloCircleColor) {
-        	String hex = ColorPickerPreference.convertToARGB(
-        			Integer.valueOf(String.valueOf(newValue)));
-        	preference.setSummary(hex);
-        	Settings.System.putInt(getActivity().getContentResolver(),
-        			Settings.System.HALO_CIRCLE_COLOR, ColorPickerPreference.convertToColorInt(hex));
+            String hex = ColorPickerPreference.convertToARGB(
+        	Integer.valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+         	     Settings.System.HALO_CIRCLE_COLOR, ColorPickerPreference.convertToColorInt(hex));
+	} else if (preference == mHaloEffectColor) {
+            String hex = ColorPickerPreference.convertToARGB(
+                Integer.valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                     Settings.System.HALO_EFFECT_COLOR, ColorPickerPreference.convertToColorInt(hex)); 
         }
         return false;
     }

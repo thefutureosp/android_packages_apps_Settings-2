@@ -242,6 +242,7 @@
     <string name="halo_colors">Enable Custom Colors</string>
     <string name="halo_colors_style">HALO colors settings</string>
     <string name="halo_colors_settings">HALO Colors</string>
-    <string name="halo_circle_color">Change Circle Color</string>  
+    <string name="halo_circle_color">Change Circle Color</string>
+    <string name="halo_effect_color">Change Effect Color</string>   
 
 </resources>
