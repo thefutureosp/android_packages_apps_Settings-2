@@ -1582,7 +1582,7 @@
 	<activity android:name=".crdroid.crdroidSettings" />
 	<activity android:name=".cyanogenmod.NotificationDrawerStyle" />
 	<activity android:name=".crdroid.RamBar" />
-	<activity android:name=".crdroid.StatusBarTrafficColor" />  	
+	<activity android:name=".crdroid.StatusBarTrafficSettings" />  	
 
  	<!-- Pseudo-activity used to provide an intent-filter entry point to ass display rotation config -->
         <activity android:name="Settings$ASSRamBarActivity"

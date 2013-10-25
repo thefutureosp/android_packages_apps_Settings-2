@@ -37,9 +37,6 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private static final String NO_NOTIFICATIONS_PULLDOWN = "no_notifications_pulldown";
     private static final String KEY_SCREEN_ON_NOTIFICATION_LED = "screen_on_notification_led";           
     private static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
-    private static final String PREF_STATUS_BAR_TRAFFIC_ENABLE = "status_bar_traffic_enable";
-    private static final String PREF_STATUS_BAR_TRAFFIC_HIDE = "status_bar_traffic_hide";
-    private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary";
     private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot"; 
     private static final String UI_COLLAPSE_BEHAVIOUR = "notification_drawer_collapse_on_dismiss";
     private static final String PREF_LESS_NOTIFICATION_SOUNDS = "less_notification_sounds";
@@ -59,9 +56,6 @@ public class crdroidSettings extends SettingsPreferenceFragment
     private ListPreference mNoNotificationsPulldown;
     private CheckBoxPreference mScreenOnNotificationLed;     
     private CheckBoxPreference mStatusBarQuickPeek; 
-    private CheckBoxPreference mStatusBarTrafficEnable;
-    private CheckBoxPreference mStatusBarTrafficHide;
-    private ListPreference mStatusBarTrafficSummary;
     private ListPreference mMSOB; 
     private ListPreference mCollapseOnDismiss;
     private ListPreference mAnnoyingNotifications;
@@ -112,19 +106,6 @@ public class crdroidSettings extends SettingsPreferenceFragment
         mStatusBarQuickPeek.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                 Settings.System.STATUSBAR_PEEK, 0) == 1)); 
 	
-	mStatusBarTrafficEnable = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_TRAFFIC_ENABLE);
-        mStatusBarTrafficEnable.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                Settings.System.STATUS_BAR_TRAFFIC_ENABLE, 0) == 1));
-
-        mStatusBarTrafficHide = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_TRAFFIC_HIDE);
-        mStatusBarTrafficHide.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                Settings.System.STATUS_BAR_TRAFFIC_HIDE, 1) == 1));  
-
-	mStatusBarTrafficSummary = (ListPreference) findPreference(STATUS_BAR_TRAFFIC_SUMMARY);
-        mStatusBarTrafficSummary.setOnPreferenceChangeListener(this);
-        mStatusBarTrafficSummary.setValue((Settings.System.getInt(getActivity().getContentResolver(),
-                        Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, 3000)) + "");
-
 	// Low battery warning
         mLowBatteryWarning = (ListPreference) findPreference(KEY_LOW_BATTERY_WARNING_POLICY);
         int lowBatteryWarning = Settings.System.getInt(getActivity().getContentResolver(),
@@ -339,16 +320,6 @@ public class crdroidSettings extends SettingsPreferenceFragment
                     Settings.System.SCREEN_ON_NOTIFICATION_LED,
                     mScreenOnNotificationLed.isChecked() ? 1 : 0);
 	    return true;
-	} else if (preference == mStatusBarTrafficEnable) {
-            value = mStatusBarTrafficEnable.isChecked();
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.STATUS_BAR_TRAFFIC_ENABLE, value ? 1 : 0);
-            return true;
-        } else if (preference == mStatusBarTrafficHide) {
-            value = mStatusBarTrafficHide.isChecked();
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.STATUS_BAR_TRAFFIC_HIDE, value ? 1 : 0);
-            return true;
 	} else if (preference == mShowCpuInfo) {
             writeCpuInfoOptions();        
         }
@@ -383,13 +354,6 @@ public class crdroidSettings extends SettingsPreferenceFragment
                     Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY,
                     lowBatteryWarning);
             mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntries()[index]);
-            return true;
-	} else if (preference == mStatusBarTrafficSummary) {
-            int val = Integer.valueOf((String) newValue);
-            int index = mStatusBarTrafficSummary.findIndexOfValue((String) newValue);
-            Settings.System.putInt(getActivity().getContentResolver(), 
-		    Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, val);
-            mStatusBarTrafficSummary.setSummary(mStatusBarTrafficSummary.getEntries()[index]);
             return true;
 	} else if (preference == mMSOB) {
             int MSOB = Integer.valueOf((String) newValue);
