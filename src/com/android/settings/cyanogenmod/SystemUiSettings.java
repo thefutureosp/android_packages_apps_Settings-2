@@ -18,6 +18,7 @@ package com.android.settings.cyanogenmod;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent; 
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -62,7 +63,8 @@ public class SystemUiSettings extends SettingsPreferenceFragment implements Pref
     private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
     private static final String KEY_LISTVIEW_ANIMATION = "listview_animation";
     private static final String KEY_LISTVIEW_INTERPOLATOR = "listview_interpolator";
-    private static final String KEY_PIE_SETTINGS = "pie_settings";   
+    private static final String KEY_PIE_SETTINGS = "pie_settings";
+    private static final String SHOW_CPU_INFO_KEY = "show_cpu_info";   
 
     private PreferenceScreen mPieControl;
     private ListPreference mExpandedDesktopPref; 
@@ -73,7 +75,8 @@ public class SystemUiSettings extends SettingsPreferenceFragment implements Pref
     private CheckBoxPreference mClearAll; 
     private CheckBoxPreference mUseAltResolver;
     private ListPreference mListViewAnimation;
-    private ListPreference mListViewInterpolator;   
+    private ListPreference mListViewInterpolator;
+    private CheckBoxPreference mShowCpuInfo;   
     
     private boolean mIsPrimary;
 
@@ -150,6 +153,11 @@ public class SystemUiSettings extends SettingsPreferenceFragment implements Pref
         mScreenOnNotificationLed.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.SCREEN_ON_NOTIFICATION_LED, 0) == 1); 
 
+	// CPU info        
+  	mShowCpuInfo = (CheckBoxPreference) prefScreen.findPreference(SHOW_CPU_INFO_KEY); 
+  	mShowCpuInfo.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.Global.SHOW_CPU, 0) != 0)); 
+
         // Pie controls
         mPieControl = (PreferenceScreen) findPreference(KEY_PIE_CONTROL);
         if (mPieControl != null && removeNavbar) {
@@ -222,6 +230,23 @@ public class SystemUiSettings extends SettingsPreferenceFragment implements Pref
             mRamBar.setSummary(getResources().getString(R.string.ram_bar_color_disabled));
     }
 
+    void updateCheckBox(CheckBoxPreference checkBox, boolean value) {
+        checkBox.setChecked(value);
+    } 
+
+    private void writeCpuInfoOptions() {
+        boolean value = mShowCpuInfo.isChecked();
+        Settings.Global.putInt(getActivity().getContentResolver(),
+                Settings.Global.SHOW_CPU, value ? 1 : 0);
+        Intent service = (new Intent())
+                .setClassName("com.android.systemui", "com.android.systemui.CPUInfoService");
+        if (value) {
+            getActivity().startService(service);
+        } else {
+            getActivity().stopService(service);
+        }
+    }  
+
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         if (preference == mExpandedDesktopPref) {
             int expandedDesktopValue = Integer.valueOf((String) objValue);
@@ -287,7 +312,9 @@ public class SystemUiSettings extends SettingsPreferenceFragment implements Pref
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.ACTIVITY_RESOLVER_USE_ALT,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
-            return true; 
+            return true;
+	} else if (preference == mShowCpuInfo) {
+            writeCpuInfoOptions();  
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     } 
