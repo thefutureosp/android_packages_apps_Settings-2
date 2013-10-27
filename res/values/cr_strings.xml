@@ -504,7 +504,7 @@
     <string name="screen_on_notification_led_title">Screen-On Notification Light</string>
     <string name="screen_on_notification_led_summary">Enable Notification Light even when screen is on</string>
 
-    <!-- Network speed -->
+    <!-- Traffic meter -->
     <string name="traffic_cat">Traffic meter options</string>
     <string name="enable_network_speed">Network speed indicator</string>
     <string name="enable_network_speed_summary">Show network speed in statusbar</string> 
@@ -521,11 +521,12 @@
     <string name="traffic_timeout_15s">15 seconds</string>
     <string name="traffic_timeout_25s">25 seconds</string> 
 
-    <!-- Network speed color style -->
-    <string name="network_speed_color_title">Network speed color</string>
+    <!-- Traffic meter color style -->
+    <string name="network_speed_color_title">Traffic meter color</string>
     <string name="network_speed_color_style">Color style</string>
-    <string name="network_speed_color_reset">Reset</string>
-    <string name="network_speed_color_summary">Change the color of network speed indicator</string>    
+    <string name="network_speed_color_reset">Reset color</string>
+    <string name="network_speed_color_summary">Change the color of traffic meter indicator</string>
+    <string name="network_speed_reset_message">Reset traffic meter color to default?</string>    
 
     <!-- TRDS Settings -->
     <string name="trds_settings_title">Dark Droid</string>

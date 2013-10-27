@@ -53,10 +53,7 @@ public class StatusBar extends SettingsPreferenceFragment
 
     private static final String PREF_STATUS_BAR_AUTO_HIDE = "status_bar_auto_hide"; 
     private static final String PREF_STATUS_BAR_QUICK_PEEK = "status_bar_quick_peek";
-    private static final String PREF_STATUS_BAR_TRAFFIC_ENABLE = "status_bar_traffic_enable";
-    private static final String PREF_STATUS_BAR_TRAFFIC_HIDE = "status_bar_traffic_hide"; 	 
-    private static final String STATUS_BAR_TRAFFIC_SUMMARY = "status_bar_traffic_summary"; 
-
+    
     /* Custom circle battery options */
     private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_COLOR = "circle_battery_color";
     private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR = "circle_battery_text_color";
@@ -86,11 +83,8 @@ public class StatusBar extends SettingsPreferenceFragment
     private CheckBoxPreference mBatteryBarChargingAnimation;
     private ColorPickerPreference mBatteryBarColor;
     private ListPreference mStatusBarAutoHide;
-    private ListPreference mStatusBarTraffic_summary;  
     private CheckBoxPreference mStatusBarQuickPeek;
-    private CheckBoxPreference mStatusBarTraffic_enable;
-    private CheckBoxPreference mStatusBarTraffic_hide;      
-
+    
     private boolean mCheckPreferences;
 
     @Override
@@ -114,20 +108,7 @@ public class StatusBar extends SettingsPreferenceFragment
 	int intColor;
         String hexColor; 
 
-	mStatusBarTraffic_enable = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_TRAFFIC_ENABLE);
-        mStatusBarTraffic_enable.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                Settings.System.STATUS_BAR_TRAFFIC_ENABLE, 0) == 1));
-
-        mStatusBarTraffic_hide = (CheckBoxPreference) prefSet.findPreference(PREF_STATUS_BAR_TRAFFIC_HIDE);
-        mStatusBarTraffic_hide.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                Settings.System.STATUS_BAR_TRAFFIC_HIDE, 1) == 1));
-
-	mStatusBarTraffic_summary = (ListPreference) findPreference(STATUS_BAR_TRAFFIC_SUMMARY);
-        mStatusBarTraffic_summary.setOnPreferenceChangeListener(this);
-        mStatusBarTraffic_summary.setValue((Settings.System.getInt(resolver,
-                        Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, 3000)) + "");  
-
-        mStatusBarBattery = (ListPreference) prefSet.findPreference(STATUS_BAR_BATTERY);
+	mStatusBarBattery = (ListPreference) prefSet.findPreference(STATUS_BAR_BATTERY);
 	mStatusBarBattery.setOnPreferenceChangeListener(this);	
 	int statusBarBattery = Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.STATUS_BAR_BATTERY, 0);
@@ -363,12 +344,6 @@ public class StatusBar extends SettingsPreferenceFragment
                     Settings.System.AUTO_HIDE_STATUSBAR, statusBarAutoHideValue);
             updateStatusBarAutoHideSummary(statusBarAutoHideValue);
             return true;
-	} else if (preference == mStatusBarTraffic_summary) {
-            int val = Integer.valueOf((String) newValue);
-            int index = mStatusBarTraffic_summary.findIndexOfValue((String) newValue);
-            Settings.System.putInt(resolver, Settings.System.STATUS_BAR_TRAFFIC_SUMMARY, val);
-            mStatusBarTraffic_summary.setSummary(mStatusBarTraffic_summary.getEntries()[index]);
-            return true; 
 	}
 
         return false;
@@ -382,16 +357,6 @@ public class StatusBar extends SettingsPreferenceFragment
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUSBAR_PEEK, value ? 1 : 0);
             return true; 
-	} else if (preference == mStatusBarTraffic_enable) {
-            value = mStatusBarTraffic_enable.isChecked();
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.STATUS_BAR_TRAFFIC_ENABLE, value ? 1 : 0);
-            return true;
-        } else if (preference == mStatusBarTraffic_hide) {
-            value = mStatusBarTraffic_hide.isChecked();
-	    Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.STATUS_BAR_TRAFFIC_HIDE, value ? 1 : 0);
-            return true;           
 	} else if (preference == mBatteryBarChargingAnimation) {
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE,
