@@ -844,4 +844,7 @@
     <!-- Fast charge tile -->
     <string name="title_tile_fcharge">Fast charge</string>  
 
+    <!-- QS Power menu -->
+    <string name="title_tile_power">Power Menu</string>  
+
 </resources>
