@@ -967,4 +967,17 @@
         <item>30s | 2m | 5m | Never</item>
     </string-array> 
 
+    <!-- Active display always show pocket mode -->
+    <string-array name="ad_pocket_mode_entries" translatable="false">
+        <item>@string/ad_pocket_mode_off</item>
+        <item>@string/ad_pocket_mode_notifications</item>
+        <item>@string/ad_pocket_mode_always</item>
+    </string-array>
+
+    <string-array name="ad_pocket_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array> 
+
 </resources>
