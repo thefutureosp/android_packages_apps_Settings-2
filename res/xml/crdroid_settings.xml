@@ -60,13 +60,7 @@
            android:entryValues="@array/pref_low_battery_warning_policy_values"
            android:defaultValue="0" />  
  
-        <!-- Traffic meter -->
-	<PreferenceScreen
-            android:key="traffic_ring"
-            android:fragment="com.android.settings.crdroid.StatusBarTrafficSettings"
-            android:title="@string/traffic_cat" />
-        
-	<!-- Naviagtion ring shortcuts -->
+        <!-- Naviagtion ring shortcuts -->
         <PreferenceScreen
             android:key="navigation_ring"
             android:fragment="com.android.settings.crdroid.NavRing"
