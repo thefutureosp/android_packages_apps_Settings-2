@@ -60,6 +60,12 @@
            android:entryValues="@array/pref_low_battery_warning_policy_values"
            android:defaultValue="0" />  
  
+	<!-- Network usage stats -->
+        <PreferenceScreen
+           android:key="network_usage_stats"
+           android:fragment="com.android.settings.crdroid.NetworkUsageStats"
+           android:title="@string/status_bar_network_cat" />
+
         <!-- Naviagtion ring shortcuts -->
         <PreferenceScreen
             android:key="navigation_ring"
