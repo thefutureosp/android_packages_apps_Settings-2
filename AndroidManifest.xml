@@ -1768,7 +1768,6 @@
 	<activity android:name=".cyanogenmod.StatusBarStyle" />
 	<activity android:name=".cyanogenmod.StatusBarClockStyle" />
 	<activity android:name=".cyanogenmod.NotificationDrawerStyle" />
-	<activity android:name=".cyanogenmod.StatusBarTrafficSettings" />
 	<activity android:name=".cyanogenmod.HaloSettings" />
 	<activity android:name=".cyanogenmod.KeyboardInputSettings" />
 	<activity android:name=".cyanogenmod.QuickSettingsTilesStyle" /> 	
