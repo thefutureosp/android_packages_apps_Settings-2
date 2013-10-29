@@ -1771,6 +1771,7 @@
 	<activity android:name=".cyanogenmod.HaloSettings" />
 	<activity android:name=".cyanogenmod.KeyboardInputSettings" />
 	<activity android:name=".cyanogenmod.QuickSettingsTilesStyle" /> 	
+        <activity android:name=".cyanogenmod.NetworkUsageStats" />  
 
 	<activity	
             android:name=".fragments.AnimationControls"	
