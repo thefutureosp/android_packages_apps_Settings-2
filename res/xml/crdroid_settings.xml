@@ -15,4 +15,9 @@
         android:fragment="com.android.settings.crdroid.LightsAndWarnings"
         android:title="@string/lights_and_warnings_title" />
 
+    <PreferenceScreen
+        android:key="general_settings"
+        android:fragment="com.android.settings.crdroid.GeneralSettings"
+        android:title="@string/general_settings_title" />
+
 </PreferenceScreen>
