@@ -18,6 +18,7 @@ package com.android.settings.crdroid;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -27,17 +28,47 @@ import android.preference.PreferenceScreen;
 import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceChangeListener;
 
+import com.android.internal.util.crdroid.DeviceUtils;
+
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 
 public class NotificationDrawer extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
+    public static final String TAG = "NotificationDrawerSettings";
+    private static final String PREF_NOTIFICATION_OPTIONS = "options";
+    private static final String PREF_NOTIFICATION_HIDE_CARRIER = "notification_hide_carrier";
+
+    CheckBoxPreference mHideCarrier;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.notification_drawer_settings);
+
+ 	PreferenceScreen prefs = getPreferenceScreen();
+
+        mHideCarrier = (CheckBoxPreference) findPreference(PREF_NOTIFICATION_HIDE_CARRIER);
+        boolean hideCarrier = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.NOTIFICATION_HIDE_CARRIER, 0) == 1;
+        mHideCarrier.setChecked(hideCarrier);
+        mHideCarrier.setOnPreferenceChangeListener(this);
+
+        PreferenceCategory additionalOptions =
+            (PreferenceCategory) prefs.findPreference(PREF_NOTIFICATION_OPTIONS);
+
+        PackageManager pm = getPackageManager();
+        boolean isMobileData = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+
+        if (!DeviceUtils.isPhone(getActivity())
+            || !DeviceUtils.deviceSupportsMobileData(getActivity())) {
+            // Nothing for tablets, large screen devices and non mobile devices which doesn't show
+            // information in notification drawer.....remove options
+            additionalOptions.removePreference(mHideCarrier);
+            prefs.removePreference(additionalOptions);
+        }
 
     }
 
@@ -47,6 +78,12 @@ public class NotificationDrawer extends SettingsPreferenceFragment implements
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+	if (preference == mHideCarrier) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.NOTIFICATION_HIDE_CARRIER,
+                    (Boolean) newValue ? 1 : 0);
+            return true;
+        }
         return false;
     }
 }

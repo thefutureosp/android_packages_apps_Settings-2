@@ -5,7 +5,6 @@
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
     android:title="@string/status_bar_title">
 
-    <!-- Status bar tweaks -->
     <PreferenceCategory
         android:title="@string/notification_drawer_style_title">
 
@@ -13,6 +12,29 @@
             android:fragment="com.android.settings.crdroid.NotificationDrawerStyle"
             android:key="notification_drawer_style_pref"
             android:title="@string/notification_drawer_background" />
+
+    </PreferenceCategory>
+
+    <PreferenceScreen
+             android:key="crdroid_notification_shortcuts"
+             android:fragment="com.android.settings.crdroid.dslv.ButtonsListViewSettings"
+             android:summary="@string/notification_shortcuts_settings_summary"
+             android:title="@string/notification_shortcuts_settings_title">
+         <extra android:name="buttonMode" android:value="5" />
+         <extra android:name="maxAllowedButtons" android:value="16" />
+         <extra android:name="disableLongpress" android:value="true" />
+         <extra android:name="useAppPickerOnly" android:value="true" />
+         <extra android:name="fragment" android:value="com.android.settings.crdroid.fragments.NotificationsShortcutFragment" />
+     </PreferenceScreen>
+
+    <PreferenceCategory
+        android:key="options"
+        android:title="@string/additional_options_title">
+
+        <CheckBoxPreference
+            android:key="notification_hide_carrier"
+            android:title="@string/notification_hide_carrier_title"
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 
