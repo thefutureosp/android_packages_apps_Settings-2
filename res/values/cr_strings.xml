@@ -4,7 +4,7 @@
 
     <!-- About phone screen, crDroid version -->
     <string name="crdroid_version_title">crDroid version</string>
-    <string name="crdroid_version_default">Build 3</string>
+    <string name="crdroid_version_default">Build 4</string>
 
     <!-- General strings -->
     <string name="reset">Reset</string>
@@ -290,5 +290,17 @@
     <string name="summary_animation_no_override">Prevent apps from overriding transitions.</string>  
     <string name="animation_duration_default">Default</string>
     <string name="header_summary_animation">@null</string>
+
+    <!-- Volume buttons custom controls -->
+    <string name="hardware_keys_volume_keys_title">Volume buttons</string>
+    <string name="home_wake_title">Home button wake</string>
+    <string name="home_wake_summary">Pressing the home button will wake your device</string>
+    <string name="volume_wake_title">Volume button wake</string>
+    <string name="volume_wake_summary">Pressing a volume button will wake your device</string>
+    <string name="volbtn_music_controls_title">Playback control</string>
+    <string name="volbtn_music_controls_summary">When the screen is off, long pressing the volume keys will seek music tracks</string>
+
+    <!-- Buttons settings header -->
+    <string name="button_settings">Buttons</string>
 
 </resources>
