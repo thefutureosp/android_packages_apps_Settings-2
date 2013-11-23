@@ -17,6 +17,10 @@
 
     <!-- crDroid settings screens -->
     <string name="crdroid_settings_title">crDroid customs</string>
+    
+    <!-- Sound settings -->
+    <string name="sound_title">Sound</string>
+    <string name="sound_settings_title">Sound settings</string>
 
     <!-- Color Picker -->
     <string name="dialog_color_picker">Color Picker</string>
@@ -375,6 +379,19 @@
     <string name="ram_bar_button_reset">Reset colors</string>
     <string name="ram_bar_reset">Reset</string>
     <string name="ram_bar_reset_message">Reset RAM bar style to default?</string>	 
+
+    <!-- Category title for power sound notification specific Settings.
+         [CHAR LIMIT=40] -->
+    <string name="power_notifications_category_title">Power connectivity alert</string>
+    <!-- Sound settings, power notifications enable/disable, setting check box label -->
+    <string name="power_notifications_enable_title">Enable</string>
+    <string name="power_notifications_enable_summary">Alert when power is connected or disconnected</string>
+    <!-- Sound settings, power notifications vibrate enable/disable, setting check box label -->
+    <string name="power_notifications_vibrate_title">Vibrate</string>
+    <!-- Sound settings, power notifications ringtone selection, preference label -->
+    <string name="power_notifications_ringtone_title">Notification sound</string>
+    <!-- Sound settings, power notifications label for ringtone == none -->
+    <string name="power_notifications_ringtone_silent">Silent</string>
 
     <!-- Volume buttons custom controls -->
     <string name="hardware_keys_volume_keys_title">Volume buttons</string>
