@@ -16,9 +16,9 @@
         android:title="@string/notification_drawer_title" />
 
     <PreferenceScreen
-        android:key="lights_and_warnings"
-        android:fragment="com.android.settings.crdroid.LightsAndWarnings"
-        android:title="@string/lights_and_warnings_title" />
+        android:key="alerts_and_warnings"
+        android:fragment="com.android.settings.crdroid.AlertsAndWarnings"
+        android:title="@string/alerts_and_warnings_title" />
 
     <PreferenceScreen
         android:key="screen_and_animations"

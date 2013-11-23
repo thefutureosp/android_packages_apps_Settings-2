@@ -17,6 +17,10 @@
 
     <!-- crDroid settings screens -->
     <string name="crdroid_settings_title">crDroid customs</string>
+
+    <!-- Alerts and warnings headers -->
+    <string name="alerts_and_warnings_title">Alerts and warnings</string>
+    <string name="alerts_and_warnings_style_title">Alerts and warnings options</string>
     
     <!-- Sound settings -->
     <string name="sound_title">Sound</string>
@@ -87,8 +91,6 @@
     <string name="notif_alpha_title">Notification row transparency</string>
 
     <!-- Advanced low battery indicator options -->  
-    <string name="lights_and_warnings_title">Lights and warnings</string>
-    <string name="lights_and_warnings_style_title">Lights and warnings options</string>
     <string name="pref_low_battery_warning_policy_title">Low battery warning</string>
     <string name="pref_low_battery_warning_policy_dialog_title">Indicate low battery warning with</string>
     <string name="low_battery_warning_policy_popup_sound">Pop-up and sound</string>
