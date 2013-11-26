@@ -487,7 +487,6 @@
     <string name="icon_picker_search">Search</string>
     <string name="icon_picker_twitter">Twitter</string>
 
-    <!-- Halo -->	    
     <!-- Halo -->
     <string name="halo_settings_title">Halo</string>
     <string name="halo_behavior_title">Halo Behavior</string>
@@ -531,7 +530,11 @@
 
     <!-- Label for are-halo-notifications-allowed checkbox in app details [CHAR LIMIT=20] -->
     <string name="app_halo_label_black">Blacklist from HALO</string>
-    <string name="app_halo_label_white">Whitelist from HALO</string>    
+    <string name="app_halo_label_white">Whitelist from HALO</string>
+
+    <!--Quick unlock -->
+    <string name="unlock_quick_unlock_control_title">Quick unlock</string>
+    <string name="unlock_quick_unlock_control_summary">Unlock automatically when the correct PIN/password is entered</string>    
 
     <!-- Volume buttons custom controls -->
     <string name="hardware_keys_volume_keys_title">Volume buttons</string>
