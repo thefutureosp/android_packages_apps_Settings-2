@@ -115,6 +115,7 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private DialogInterface mWarnInstallApps;
     private CheckBoxPreference mToggleVerifyApps;
     private CheckBoxPreference mPowerButtonInstantlyLocks;
+    private Preference mEnableKeyguardWidgets;
 
     private CheckBoxPreference mQuickUnlockScreen;
 
@@ -278,6 +279,27 @@ public class SecuritySettings extends RestrictedSettingsFragment
                 (TelephonyManager.getDefault().getSimState() ==
                                  TelephonyManager.SIM_STATE_UNKNOWN)) {
                 root.findPreference(KEY_SIM_LOCK).setEnabled(false);
+            }
+        }
+
+	// Link to widget settings showing summary about the actual status
+        // and remove them on low memory devices
+        mEnableKeyguardWidgets = root.findPreference(KEY_ENABLE_WIDGETS);
+        if (mEnableKeyguardWidgets != null) {
+            if (ActivityManager.isLowRamDeviceStatic()) {
+                // Widgets take a lot of RAM, so disable them on low-memory devices
+                if (securityCategory != null) {
+                    securityCategory.removePreference(root.findPreference(KEY_ENABLE_WIDGETS));
+                    mEnableKeyguardWidgets = null;
+                }
+            } else {
+                final boolean disabled = (0 != (mDPM.getKeyguardDisabledFeatures(null)
+                        & DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL));
+                if (disabled) {
+                    mEnableKeyguardWidgets.setSummary(
+                            R.string.security_enable_widgets_disabled_summary);
+                }
+                mEnableKeyguardWidgets.setEnabled(!disabled);
             }
         }
 
@@ -540,6 +562,14 @@ public class SecuritySettings extends RestrictedSettingsFragment
         if (mResetCredentials != null) {
             mResetCredentials.setEnabled(!mKeyStore.isEmpty());
         }
+
+        if (mEnableKeyguardWidgets != null) {
+            if (!lockPatternUtils.getWidgetsEnabled()) {
+                mEnableKeyguardWidgets.setSummary(R.string.disabled);
+            } else {
+                mEnableKeyguardWidgets.setSummary(R.string.enabled);
+            }
+	}
 
 	updateBlacklistSummary();
     }
