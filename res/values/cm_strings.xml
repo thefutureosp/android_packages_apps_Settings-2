@@ -604,19 +604,6 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="sms_security_check_limit_summary">Apps can send %d messages in 30 minutes before requiring confirmation</string>
     <string name="sms_security_check_limit_default">30 (Default)</string>
 
-    <!-- Power menu enable disable -->
-    <string name="power_menu_title">Power menu</string>
-    <string name="power_menu_reboot_title">Reboot menu</string>
-    <string name="power_menu_screenshot_title">Screenshot</string>
-    <string name="power_menu_expanded_desktop">Expanded desktop</string>
-    <string name="expanded_desktop_disabled">Disabled</string>
-    <string name="expanded_desktop_status_bar">Status bar visible</string>
-    <string name="expanded_desktop_no_status_bar">Status bar hidden</string>
-    <string name="power_menu_profiles_title">Profile switcher</string>
-    <string name="power_menu_airplane_title">Airplane mode</string>
-    <string name="power_menu_user_title">User switcher</string>
-    <string name="power_menu_sound_title">Sound panel</string>
-
     <!-- Hardware keys -->
     <string name="button_settings">Buttons</string>
     <string name="hardware_keys_enable_custom_title">Allow custom buttons</string>
