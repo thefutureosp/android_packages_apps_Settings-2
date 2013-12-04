@@ -55,7 +55,7 @@ import android.widget.Toast;
 import com.android.internal.util.crdroid.ButtonConfig;
 import com.android.internal.util.crdroid.ButtonsConstants;
 import com.android.internal.util.crdroid.ButtonsHelper;
-import com.android.internal.util.crdroid.ColorHelper;
+import com.android.internal.util.crdroid.ImageHelper;
 import com.android.internal.util.crdroid.DeviceUtils;
 import com.android.internal.util.crdroid.DeviceUtils.FilteredDeviceFeaturesArray;
 
@@ -89,7 +89,7 @@ public class ButtonsListViewSettings extends ListFragment implements
     private static final int NAV_RING              = 3;
     private static final int LOCKSCREEN_SHORTCUT   = 4;
     private static final int NOTIFICATION_SHORTCUT = 5;
-
+    
     private static final int DEFAULT_MAX_BUTTON_NUMBER = 5;
 
     public static final int REQUEST_PICK_CUSTOM_ICON = 1000;
@@ -195,7 +195,7 @@ public class ButtonsListViewSettings extends ListFragment implements
         mActionDialogValues = finalActionDialogArray.values;
         mActionDialogEntries = finalActionDialogArray.entries;
 
-        mPicker = new ShortcutPickerHelper(this, this);
+        mPicker = new ShortcutPickerHelper(mActivity, this);
 
         mImageTmp = new File(mActivity.getCacheDir()
                 + File.separator + "shortcut.tmp");
@@ -216,7 +216,7 @@ public class ButtonsListViewSettings extends ListFragment implements
                         mPendingIndex = arg2;
                         mPendingLongpress = false;
                         mPendingNewButton = false;
-                        mPicker.pickShortcut();
+                        mPicker.pickShortcut(getId());
                     }
                 }
             }
@@ -234,7 +234,7 @@ public class ButtonsListViewSettings extends ListFragment implements
                             mPendingIndex = arg2;
                             mPendingLongpress = true;
                             mPendingNewButton = false;
-                            mPicker.pickShortcut();
+                            mPicker.pickShortcut(getId());
                         }
                     }
                     return true;
@@ -288,7 +288,7 @@ public class ButtonsListViewSettings extends ListFragment implements
 
     @Override
     public void shortcutPicked(String action,
-                String description, Bitmap bmp, boolean isApplication) {
+                String description, boolean isApplication) {
         if (mPendingIndex == -1) {
             return;
         }
@@ -417,15 +417,15 @@ public class ButtonsListViewSettings extends ListFragment implements
                         mPendingIndex = 0;
                         mPendingLongpress = false;
                         mPendingNewButton = true;
-                        mPicker.pickShortcut();
+                        mPicker.pickShortcut(getId());
                     }
                 }
                 break;
             case MENU_RESET:
-                showDialogInner(DLG_RESET_TO_DEFAULT, 0, false, true);
+                    showDialogInner(DLG_RESET_TO_DEFAULT, 0, false, true);
                 break;
             case MENU_HELP:
-                showDialogInner(DLG_SHOW_HELP_SCREEN, 0, false, true);
+                    showDialogInner(DLG_SHOW_HELP_SCREEN, 0, false, true);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -460,7 +460,7 @@ public class ButtonsListViewSettings extends ListFragment implements
 
     private ArrayList<ButtonConfig> getConfig() {
         switch (mButtonMode) {
-	    case NAV_BAR:
+            case NAV_BAR:
                 return ButtonsHelper.getNavBarConfigWithDescription(
                     mActivity, mActionValuesKey, mActionEntriesKey);
             case NAV_RING:
@@ -468,13 +468,15 @@ public class ButtonsListViewSettings extends ListFragment implements
                     mActivity, mActionValuesKey, mActionEntriesKey);
             case NOTIFICATION_SHORTCUT:
                 return ButtonsHelper.getNotificationsShortcutConfig(mActivity);
+            case LOCKSCREEN_SHORTCUT:
+                return ButtonsHelper.getLockscreenShortcutConfig(mActivity);
         }
         return null;
     }
 
     private void setConfig(ArrayList<ButtonConfig> buttonConfigs, boolean reset) {
         switch (mButtonMode) {
-	    case NAV_BAR:
+            case NAV_BAR:
                 ButtonsHelper.setNavBarConfig(mActivity, buttonConfigs, reset);
                 break;
             case NAV_RING:
@@ -485,6 +487,9 @@ public class ButtonsListViewSettings extends ListFragment implements
                 if (reset) {
                     loadAdditionalFragment();
                 }
+                break;
+            case LOCKSCREEN_SHORTCUT:
+                ButtonsHelper.setLockscreenShortcutConfig(mActivity, buttonConfigs, reset);
                 break;
         }
     }
@@ -529,11 +534,12 @@ public class ButtonsListViewSettings extends ListFragment implements
                     getResources().getString(R.string.shortcut_action_longpress)
                     + " " + getItem(position).getLongpressActionDescription());
             }
-            holder.iconView.setImageDrawable(ColorHelper.resize(
+            
+	    holder.iconView.setImageDrawable(ImageHelper.resize(
                         mActivity, ButtonsHelper.getButtonIconImage(mActivity,
                         getItem(position).getClickAction(),
                         getItem(position).getIcon()), 36));
-
+            
             if (!mDisableIconPicker && holder.iconView.getDrawable() != null) {
                 holder.iconView.setOnClickListener(new OnClickListener() {
                     @Override
@@ -624,7 +630,7 @@ public class ButtonsListViewSettings extends ListFragment implements
                     String buttonMode;
                     String icon = "";
                     switch (getOwner().mButtonMode) {
-                       // case LOCKSCREEN_SHORTCUT:
+                        // case LOCKSCREEN_SHORTCUT:
                         case NOTIFICATION_SHORTCUT:
                         case NAV_BAR:
                         case NAV_RING:
@@ -711,7 +717,7 @@ public class ButtonsListViewSettings extends ListFragment implements
                                     getOwner().mPendingIndex = which;
                                     getOwner().mPendingLongpress = longpress;
                                     getOwner().mPendingNewButton = newButton;
-                                    getOwner().mPicker.pickShortcut();
+                                    getOwner().mPicker.pickShortcut(getOwner().getId());
                                 }
                             } else {
                                 if (newButton) {

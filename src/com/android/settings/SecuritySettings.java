@@ -44,6 +44,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.internal.telephony.util.BlacklistUtils;
+import com.android.internal.util.crdroid.DeviceUtils;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.R;
 
@@ -68,6 +69,9 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private static final String KEY_DEVICE_ADMIN_CATEGORY = "device_admin_category";
     private static final String KEY_LOCK_AFTER_TIMEOUT = "lock_after_timeout";
     private static final String KEY_OWNER_INFO_SETTINGS = "owner_info_settings";
+    private static final String KEY_ENABLE_WIDGETS = "keyguard_enable_widgets";
+    private static final String KEY_INTERFACE_SETTINGS = "lock_screen_settings";
+    private static final String KEY_TARGET_SETTINGS = "lockscreen_targets";
 
     private static final int SET_OR_CHANGE_LOCK_METHOD_REQUEST = 123;
     private static final int CONFIRM_EXISTING_FOR_BIOMETRIC_WEAK_IMPROVE_REQUEST = 124;
@@ -110,7 +114,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private DialogInterface mWarnInstallApps;
     private CheckBoxPreference mToggleVerifyApps;
     private CheckBoxPreference mPowerButtonInstantlyLocks;
-
 
     private Preference mNotificationAccess;
 
@@ -180,7 +183,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
         }
         addPreferencesFromResource(resid);
 
-
         // Add options for device encryption
         mIsPrimary = UserHandle.myUserId() == UserHandle.USER_OWNER;
 
@@ -227,12 +229,25 @@ public class SecuritySettings extends RestrictedSettingsFragment
         mPowerButtonInstantlyLocks = (CheckBoxPreference) root.findPreference(
                 KEY_POWER_INSTANTLY_LOCKS);
 
+        PreferenceGroup securityCategory = (PreferenceGroup)
+                root.findPreference(KEY_SECURITY_CATEGORY);
+        if (securityCategory != null) {
+            Preference lockInterfacePref = findPreference(KEY_INTERFACE_SETTINGS);
+            Preference lockTargetsPref = findPreference(KEY_TARGET_SETTINGS);
+            if (lockInterfacePref != null && lockTargetsPref != null) {
+                if (!DeviceUtils.isPhone(getActivity())) {
+                     // Nothing for tablets and large screen devices
+                     securityCategory.removePreference(lockInterfacePref);
+                } else {
+                     securityCategory.removePreference(lockTargetsPref);
+                }
+            }
+        }
+
         // don't display visible pattern if biometric and backup is not pattern
         if (resid == R.xml.security_settings_biometric_weak &&
                 mLockPatternUtils.getKeyguardStoredPasswordQuality() !=
                 DevicePolicyManager.PASSWORD_QUALITY_SOMETHING) {
-            PreferenceGroup securityCategory = (PreferenceGroup)
-                    root.findPreference(KEY_SECURITY_CATEGORY);
             if (securityCategory != null && mVisiblePattern != null) {
                 securityCategory.removePreference(root.findPreference(KEY_VISIBLE_PATTERN));
             }
@@ -254,7 +269,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
                 root.findPreference(KEY_SIM_LOCK).setEnabled(false);
             }
         }
-
 
         // Show password
         mShowPassword = (CheckBoxPreference) root.findPreference(KEY_SHOW_PASSWORD);
@@ -516,7 +530,7 @@ public class SecuritySettings extends RestrictedSettingsFragment
             mResetCredentials.setEnabled(!mKeyStore.isEmpty());
         }
 
-        updateBlacklistSummary();
+	updateBlacklistSummary();
     }
 
     @Override
@@ -567,7 +581,7 @@ public class SecuritySettings extends RestrictedSettingsFragment
             lockPatternUtils.setVisiblePatternEnabled(isToggled(preference));
         } else if (KEY_POWER_INSTANTLY_LOCKS.equals(key)) {
             lockPatternUtils.setPowerButtonInstantlyLocks(isToggled(preference));
-        } else if (preference == mShowPassword) {
+	} else if (preference == mShowPassword) {
             Settings.System.putInt(getContentResolver(), Settings.System.TEXT_SHOW_PASSWORD,
                     mShowPassword.isChecked() ? 1 : 0);
         } else if (preference == mToggleAppInstallation) {
