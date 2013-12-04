@@ -393,14 +393,10 @@ public class ButtonsListViewSettings extends ListFragment implements
     }
 
     private boolean checkForDuplicateMainNavButtons(String action) {
-        // disabled for now till navbar navring and pie is back for 4.4
         ButtonConfig button;
         for (int i = 0; i < mButtonConfigs.size(); i++) {
             button = mButtonConfigsAdapter.getItem(i);
-            if (button.getClickAction().equals(action)
-                && (action.equals(ButtonsConstants.ACTION_HOME)
-                || action.equals(ButtonsConstants.ACTION_BACK)
-                || action.equals(ButtonsConstants.ACTION_RECENTS))) {
+            if (button.getClickAction().equals(action)) {
                 Toast.makeText(mActivity,
                         getResources().getString(R.string.shortcut_duplicate_entry),
                         Toast.LENGTH_LONG).show();
@@ -702,7 +698,7 @@ public class ButtonsListViewSettings extends ListFragment implements
             holder.iconView.setImageDrawable(ButtonsHelper.getButtonIconImage(mActivity,
                     getItem(position).getClickAction(), getItem(position).getIcon()));
 
-            if (!mDisableIconPicker) {
+            if (!mDisableIconPicker && holder.iconView.getDrawable() != null) {
                 holder.iconView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
