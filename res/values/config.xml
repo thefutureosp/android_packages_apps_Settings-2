@@ -43,7 +43,7 @@
 
     <!-- Volume Rocker Wake Support. Some devices do not support (PMU) this.
          Setting to false will disable Volume Rocker Wake support -->
-    <bool name="config_show_volumeRockerWake">false</bool>
+    <bool name="config_show_volumeRockerWake">true</bool>
 
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
