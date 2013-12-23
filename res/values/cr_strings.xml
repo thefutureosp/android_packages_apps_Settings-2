@@ -35,4 +35,17 @@
     <!-- Label for are-halo-notifications-allowed checkbox in app details [CHAR LIMIT=20] -->
     <string name="app_halo_label_black">Blacklist from HALO</string>
     <string name="app_halo_label_white">Whitelist from HALO</string>
+
+    <!-- Density Changer -->
+    <string name="custom_density_title">Custom lcd density</string>
+    <string name="custom_density">custom</string>
+    <string name="set_custom_density_title">Set custom density</string>
+    <string name="set_custom_density_set">Set</string>
+    <string name="reboot_now">Reboot</string>
+    <string name="dialog_reboot_title">Would you like to reboot?</string>
+    <string name="dialog_reboot_summary">You must reboot to apply new density</string>
+    <string name="custom_density_summary_invalid">"INVALID DENSITY!"</string>
+    <string name="dpi">DPI</string>
+    <string name="current_lcd_density">"Current LCD Density: "</string>
+
 </resources>
