@@ -129,6 +129,20 @@
     <header android:id="@+id/personal_section"
         android:title="@string/header_category_personal" />
 
+    <!-- Navigation rings -->
+    <header
+        android:id="@+id/nav_ring"
+        android:fragment="com.android.settings.crdroid.NavRing"
+        android:icon="@drawable/ic_settings_about"
+        android:title="@string/navigation_ring_title" />
+
+    <!-- Lockscreen targets -->
+    <header
+        android:id="@+id/lockscreen_tergets"
+        android:fragment="com.android.settings.crdroid.LockscreenTargets"
+        android:icon="@drawable/ic_settings_about"
+        android:title="@string/lockscreen_targets_title" />
+
     <!-- HALO -->
     <header
         android:id="@+id/halo_settings"
