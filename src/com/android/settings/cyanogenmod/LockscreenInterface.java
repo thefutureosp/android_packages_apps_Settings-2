@@ -47,10 +47,12 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
     private static final String KEY_ENABLE_WIDGETS = "keyguard_enable_widgets";
     private static final String KEY_LOCK_CLOCK = "lock_clock";
     private static final String KEY_ENABLE_CAMERA = "keyguard_enable_camera";
+    private static final String KEY_SEE_TRHOUGH = "see_through";
 
     private ListPreference mBatteryStatus;
     private CheckBoxPreference mEnableKeyguardWidgets;
     private CheckBoxPreference mEnableCameraWidget;
+    private CheckBoxPreference mSeeThrough;
 
     private ChooseLockSettingsHelper mChooseLockSettingsHelper;
     private LockPatternUtils mLockUtils;
@@ -88,6 +90,19 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
         // Enable or disable lockscreen widgets based on policy
         checkDisabledByPolicy(mEnableKeyguardWidgets,
                 DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL);
+
+        // Remove/disable custom widgets based on device RAM and policy
+        if (ActivityManager.isLowRamDeviceStatic()) {
+            // Widgets take a lot of RAM, so disable them on low-memory devices
+            widgetsCategory.removePreference(findPreference(KEY_ENABLE_WIDGETS));
+            mEnableKeyguardWidgets = null;
+        } else {
+            checkDisabledByPolicy(mEnableKeyguardWidgets,
+                    DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL);
+        }
+
+        // lockscreen see through
+        mSeeThrough = (CheckBoxPreference) findPreference(KEY_SEE_TRHOUGH);
 
         // Enable or disable camera widget based on device and policy
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
@@ -144,6 +159,9 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
         } else if (KEY_ENABLE_CAMERA.equals(key)) {
             mLockUtils.setCameraEnabled(mEnableCameraWidget.isChecked());
             return true;
+	} else if (preference == mSeeThrough) {
+            Settings.System.putInt(getContentResolver(), Settings.System.LOCKSCREEN_SEE_THROUGH,
+                    mSeeThrough.isChecked() ? 1 : 0);
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
