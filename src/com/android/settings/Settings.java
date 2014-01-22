@@ -1193,4 +1193,5 @@ public class Settings extends PreferenceActivity
     public static class BlacklistSettingsActivity extends Settings { /* empty */ }
     public static class SystemSettingsActivity extends Settings { /* empty */ }
     public static class QuickSettingsConfigActivity extends Settings { /* empty */ }
+    public static class ASSRamBarActivity extends Settings { /* empty */ }
 }
