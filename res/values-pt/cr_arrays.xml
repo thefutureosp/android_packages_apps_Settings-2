@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="clock_date_format_entries_values">
+        <item>dd/MM/aa</item>
+        <item>MM/dd/aa</item>
+        <item>aaaa-MM-dd</item>
+        <item>aaaa-dd-MM</item>
+        <item>dd-MM-aaaa</item>
+        <item>MM-dd-aaaa</item>
+        <item>MMM dd</item>
+        <item>MMM dd, aaaa</item>
+        <item>MMMM dd, aaaa</item>
+        <item>EEE</item>
+        <item>EEE dd</item>
+        <item>EEE dd/MM</item>
+        <item>EEE MM/dd</item>
+        <item>EEE dd MMM</item>
+        <item>EEE MMM dd</item>
+        <item>EEE MMMM dd</item>
+        <item>EEEE dd/MM</item>
+        <item>EEEE MM/dd</item>
+        <item>@string/clock_date_format_custom</item>
+    </string-array>
+</resources>
