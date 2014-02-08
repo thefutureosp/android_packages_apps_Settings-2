@@ -1689,11 +1689,11 @@
             android:theme="@style/CryptKeeperBlankTheme"
         />
 
-        <!-- DU Changelog activities -->
+        <!-- Orca Changelog activities -->
         <activity android:name="us.orca.project.changelog.MainActivity" 
                   android:label="@string/orca_app_name"/>
         <activity android:name="us.orca.project.changelog.ListVersions"/>
-        <activity android:name="us.orca.project.changelog.ChangeList"/>
+        <activity android:name="us.orca.project.changelog.ChangeList"/>       
         
         <!-- CyanogenMod activities Start -->
         <activity android:name="Settings$SystemSettingsActivity"
