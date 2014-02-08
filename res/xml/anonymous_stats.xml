@@ -13,7 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
+<!-- 
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/anonymous_statistics_title"
@@ -31,5 +31,6 @@
     <Preference
         android:key="pref_view_stats"
         android:title="@string/view_stats_title" />
+ <!-- 
 
 </PreferenceScreen>
