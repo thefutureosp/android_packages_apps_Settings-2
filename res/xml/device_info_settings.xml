@@ -35,6 +35,7 @@
                     android:targetClass="com.android.settings.deviceinfo.Status" />
         </PreferenceScreen>
 
+        <!-- 
         <!-- CyanogenMod Updates -->
         <PreferenceScreen android:key="cm_updates"
                 android:title="@string/cmupdate_settings_title" 
@@ -57,6 +58,7 @@
             android:title="@string/changelog_title"
             android:fragment="com.android.settings.cyanogenmod.ChangeLog" >
         </PreferenceScreen>
+        <!-- 
 
         <!-- Legal Information -->
         <PreferenceScreen
@@ -82,12 +84,14 @@
                 <intent android:action="android.settings.LICENSE" />
             </PreferenceScreen>
 
+            <!-- 
             <!-- CM License information -->
             <PreferenceScreen
                     android:key="cmlicense"
                     android:title="@string/cmlicense_title">
                 <intent android:action="android.settings.CMLICENSE" />
             </PreferenceScreen>
+            <!-- 
 
             <!-- Terms and conditions -->
             <PreferenceScreen
@@ -167,11 +171,11 @@
                 android:title="@string/mod_version"
                 android:summary="@string/mod_version_default" />
 
-	<!-- crDroid version -->
-        <Preference android:key="crdroid_version"
+	    <!-- Orca version -->
+        <Preference android:key="orca_version"
                 style="?android:preferenceInformationStyle"
-                android:title="@string/crdroid_version_title"
-                android:summary="@string/crdroid_version_default"/>
+                android:title="@string/orca_version_title"
+                android:summary="@string/orca_version_default"/>
 
         <!-- Mod build date -->
         <Preference android:key="build_date"
