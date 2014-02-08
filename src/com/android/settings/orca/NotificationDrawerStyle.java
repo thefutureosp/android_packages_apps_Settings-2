@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.settings.crdroid;
+package com.android.settings.orca;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -41,7 +41,7 @@ import com.android.internal.util.crdroid.DeviceUtils;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
-import com.android.settings.crdroid.SeekBarPreference;
+import com.android.settings.orca.SeekBarPreference;
 
 import java.io.File;
 

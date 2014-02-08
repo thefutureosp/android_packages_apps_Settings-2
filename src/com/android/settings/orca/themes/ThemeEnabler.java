@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.android.settings.crdroid.themes;
+package com.android.settings.orca.themes;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import com.android.internal.util.crdroid.TRDSConstant;
-import com.android.internal.util.crdroid.TRDSActions;
+import com.android.internal.util.orca.TRDSConstant;
+import com.android.internal.util.orca.TRDSActions;
 
 import com.android.settings.R;
 
